@@ -4,7 +4,10 @@
   "description": "The tool you need for your GRPC clients and backends",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "cross-env START_HOT=1 yarn start-server-dev",
+    "start": "cross-env NODE_ENV=production electron ./app/",
+    "start-server-dev": "cross-env NODE_ENV=development node --experimental-worker --trace-warnings ./node_modules/webpack-dev-server/bin/webpack-dev-server --config webpack.config.renderer.dev.js",
+    "start-main-dev": "cross-env HOT=1 NODE_ENV=development webpack --config webpack.config.renderer.dev.js && cross-env HOT=1 NODE_ENV=development electron ./app/main.dev.bundle.js"
   },
   "repository": {
     "type": "git",

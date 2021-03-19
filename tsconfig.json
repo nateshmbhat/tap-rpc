@@ -1,0 +1,28 @@
+{
+  "extends": "@tsconfig/svelte/tsconfig.json",
+  "compilerOptions": {
+    "alwaysStrict": true,
+    "strictNullChecks": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": false,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "allowSyntheticDefaultImports": true,
+    "lib": ["es2015", "es2017", "es2016", "dom"],
+    "outDir": "dist"
+  },
+  "files": ["app/index.ts"],
+  "include": [
+    "app/**/*app/index.ts",
+    "app/**/*.svelte",
+    "test/**/*.ts",
+    "public/*.css",
+    "public/*.html",
+    "app/**/*.ts",
+    "typings/index.d.ts",
+    "node_modules/svelte"
+  ],
+  "exclude": ["node_modules", "dist" ,"__sapper__/*"]
+}
