@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.grpc.tapwire.helloworld";
+option java_outer_classname = "HelloWorldProto";
+option objc_class_prefix = "HLW";
+package hello_world;
+
+// The greeting service definition.
+service Greeter {
+    // Sends a greeting
+    rpc SayHello (HelloRequest) returns (HelloReply) {}
+  }
+
+service PathMaker {
+    // Sends a greeting
+    rpc TellHello (SampleMessage) returns (HelloReply) {}
+  }
+ 
+  
+  // The request message containing the user's name.
+  message HelloRequest {
+    string name = 1;
+    int32 age=2;
+    int32 index=3;
+    repeated string email=4;
+    repeated SampleMessage sampleMessage=5;
+    bool is_active=6;
+  }
+
+  // The response message containing the greetings
+  message HelloReply {
+    string name= 1;
+    int32 age = 2;
+    repeated HelloRequest users= 3;
+    bool enabled=6;
+    string id=7;
+    string address=8;
+  }
+
+  message SampleMessage{
+    string name= 1;
+    int32 age = 2;
+  }
