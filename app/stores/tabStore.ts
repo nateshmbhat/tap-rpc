@@ -1,7 +1,6 @@
 import { derived, writable } from "svelte/store";
 import type { RpcProtoInfo } from "../renderer/behaviour";
 import { RpcOperationMode } from "./appConfigStore";
-import { EditorEventEmitter } from "../renderer/behaviour/responseStateController";
 
 export interface TabConfigModel {
     id: string;
@@ -26,13 +25,11 @@ export enum EditorDataFlowMode {
 export interface RequestEditorModel {
     text: string;
     metadata: string;
-    eventEmitter: EditorEventEmitter;
     dataFlowMode: EditorDataFlowMode;
 }
 
 export interface ResponseEditorModel {
     text: string;
-    eventEmitter: EditorEventEmitter;
     dataFlowMode: EditorDataFlowMode;
 }
 
@@ -42,8 +39,8 @@ function getDefaultTabConfig(): TabConfigModel {
         selectedRpc: undefined,
         targetGrpcServerUrl: 'localhost:50053',
         rpcOperationMode: RpcOperationMode.monitor,
-        requestEditorState: { text: '', eventEmitter: new EditorEventEmitter(), metadata: '{}', dataFlowMode: EditorDataFlowMode.passThrough },
-        responseEditorState: { text: '', eventEmitter: new EditorEventEmitter(), dataFlowMode: EditorDataFlowMode.passThrough },
+        requestEditorState: { text: '', metadata: '{}', dataFlowMode: EditorDataFlowMode.passThrough },
+        responseEditorState: { text: '',  dataFlowMode: EditorDataFlowMode.passThrough },
         mockRpcEditorText: '{}'
     });
 }
