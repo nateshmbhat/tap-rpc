@@ -1,9 +1,10 @@
 import { writable } from "svelte/store";
 import type { ProtoFile, RpcProtoInfo } from "../renderer/behaviour/models";
+import { fetchProtoFiles } from "../renderer/disk_storage";
 import path from 'path'
 
 function createProtoFilesStore() {
-  const { subscribe, set, update } = writable<ProtoFile[]>([]);
+  const { subscribe, set, update } = writable<ProtoFile[]>(fetchProtoFiles());
   return {
     subscribe,
     setProtoFiles: (protoFiles: ProtoFile[]) => {

@@ -1,6 +1,7 @@
 import type { ServiceDefinition } from '@grpc/grpc-js';
 import type { Proto, ServiceMethodsPayload } from 'bloomrpc-mock-js';
 import type { RpcProtoInfo } from '.';
+import type { ResponseMetaInformation } from '..';
 
 export interface ProtoFile {
   proto: Proto,
@@ -24,4 +25,5 @@ export interface ProtoService {
 export interface ResponseInfo {
   isStreaming: boolean;
   data: Object;
+  metaInfo: ResponseMetaInformation;
 }

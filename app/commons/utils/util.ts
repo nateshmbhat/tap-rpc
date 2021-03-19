@@ -188,8 +188,18 @@ export class FakerUtil {
 
             case 'timestamp': return Date.now().toString()
             case 'name': return faker.name.findName()
+
+            case 'description':
+            case 'sentence': return faker.lorem.sentence()
+
+            case 'message': return faker.lorem.sentences(faker.random.number(3) + 1)
+
+            case 'storyline':
+            case 'body': return faker.lorem.paragraph()
         }
-        return value
+
+        if(key.endsWith('id')) return faker.random.uuid()
+        return faker.random.word()
     }
 
     private static getNumberValue(key: string, value: number): number {
@@ -197,7 +207,7 @@ export class FakerUtil {
             case 'age': return faker.random.number(100)
             case 'lat': return Number.parseFloat(faker.address.latitude())
             case 'long': return Number.parseFloat(faker.address.longitude())
-            case 'rating': return faker.random.number(10)
+            case 'rating': return faker.random.number(5)
             case 'year': return new Date().getFullYear()
             case 'month': return new Date().getMonth()
             case 'day': return new Date().getDay()
