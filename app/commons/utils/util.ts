@@ -3,7 +3,9 @@ import type { OpenDialogReturnValue } from "electron/main";
 import type { RpcProtoInfo } from "../../renderer/behaviour";
 import { servicesStore } from "../../stores";
 import faker from 'faker';
+import { TabConfigModel, tabListConfigStore } from "../../stores/tabStore";
 import { get } from "svelte/store";
+import immer from 'immer'
 
 export class ProtoUtil {
     static async getMethodRpc(serviceName: string, methodName: string): Promise<RpcProtoInfo> {
@@ -25,6 +27,16 @@ export class ProtoUtil {
 
     static stringify(message: any, indentSpace = 2): string {
         return JSON.stringify(message, null, indentSpace)
+    }
+}
+
+export class TabUtil {
+    static async getTabConfigFromRpc(rpcProtoInfo: RpcProtoInfo): Promise<TabConfigModel | undefined> {
+        const appConfig = get(tabListConfigStore)
+        return appConfig.tabs.find((tabModel, index, allTabs) => {
+            const rpc = tabModel.selectedRpc
+            return rpc?.serviceName == rpcProtoInfo.serviceName && rpc.methodName == rpcProtoInfo.methodName
+        })
     }
 }
 
@@ -57,22 +69,27 @@ export class FakerUtil {
                 object[key] = this.getNumberValue(key, value)
             }
 
-            else if (Array.isArray(value)) {
-                for (let arrayIndex in value) {
-                    const arrayItem = value[arrayIndex]
+            else if (Array.isArray(value) && value.length > 0) {
+                const newArray = [...new Array(faker.random.number(4) + 1)].map(e => value[0])
+                for (let arrayIndex in newArray) {
+                    const arrayItem = newArray[arrayIndex]
                     if (typeof arrayItem === 'string') {
-                        value[arrayIndex] = this.getStringValue(key, arrayItem)
+                        newArray[arrayIndex] = this.getStringValue(key, arrayItem)
                     }
                     else if (typeof arrayItem === 'boolean') {
-                        value[arrayIndex] = faker.random.boolean()
+                        newArray[arrayIndex] = faker.random.boolean()
                     }
                     else if (typeof arrayItem === 'number') {
-                        value[arrayIndex] = this.getNumberValue(key, arrayItem)
+                        newArray[arrayIndex] = this.getNumberValue(key, arrayItem)
                     }
                     else if (typeof arrayItem === 'object') {
-                        value[arrayIndex] = this.generateFakeJsonObject(arrayItem)
+                        const newArrayItem = immer(arrayItem, (draft: any) => {
+                            this.generateFakeJsonObject(draft)
+                        })
+                        newArray[arrayIndex] = newArrayItem
                     }
                 }
+                object[key] = newArray
             }
 
             else if (typeof value === 'object') {
@@ -171,7 +188,6 @@ export class FakerUtil {
 
             case 'timestamp': return Date.now().toString()
             case 'name': return faker.name.findName()
-
         }
         return value
     }
