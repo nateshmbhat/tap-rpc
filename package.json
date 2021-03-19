@@ -1,0 +1,32 @@
+{
+  "name": "tap-rpc",
+  "version": "1.0.0",
+  "description": "The tool you need for your GRPC clients and backends",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nateshmbhat/tap-rpc.git"
+  },
+  "keywords": [
+    "tap-rpc",
+    "taprpc",
+    "grpc-tap",
+    "grpc",
+    "grpcmock",
+    "mockrpc",
+    "mockgrpc",
+    "monitor rpc",
+    "grpcproxy",
+    "grpc-editor",
+    "grpc-server"
+  ],
+  "author": "nateshmbhat",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/nateshmbhat/tap-rpc/issues"
+  },
+  "homepage": "https://github.com/nateshmbhat/tap-rpc#readme"
+}
