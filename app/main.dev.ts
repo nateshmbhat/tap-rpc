@@ -1,4 +1,6 @@
 import { BrowserWindow } from "electron";
+import type { IpcMainChannelInterface } from "./commons/ipc/ipcChannelInterface";
+import { GrpcServerChannel, ProtoImporterChannel } from "./main_process/ipc/ipcMainChannels";
 
 /**
  * This module executes inside of electron's main process. You can start
@@ -14,6 +16,7 @@ const {
   ipcMain,
   ipcRenderer
 } = require('electron');
+const MenuBuilder = require('./menu');
 
 class Main {
   private mainWindow: BrowserWindow | null = null;
@@ -22,7 +25,7 @@ class Main {
     return this.mainWindow!
   }
 
-  public init() {
+  public init(ipcChannels: IpcMainChannelInterface[]) {
     if (process.env.NODE_ENV === 'production') {
       const sourceMapSupport = require('source-map-support');
       sourceMapSupport.install();
@@ -41,6 +44,7 @@ class Main {
 
     app.on('window-all-closed', this.onWindowAllClosed);
     app.on('ready', this.createWindow);
+    this.registerIpcChannels(ipcChannels)
   }
 
 
@@ -94,8 +98,15 @@ class Main {
     this.mainWindow.on('closed', () => {
       this.mainWindow = null;
     });
+
+    const menuBuilder = new MenuBuilder(this.mainWindow);
+    menuBuilder.buildMenu();
+  }
+
+  private registerIpcChannels(ipcChannels: IpcMainChannelInterface[]) {
+    ipcChannels.forEach(channel => ipcMain.on(channel.getName(), (event, request) => channel.handle(event, request)));
   }
 }
 
 
-new Main().init()
+new Main().init([new ProtoImporterChannel(), new GrpcServerChannel()])

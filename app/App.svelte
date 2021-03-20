@@ -1,4 +1,5 @@
 <script lang="ts">
+  import TapWire from './renderer/components/TapWire.svelte'
   import { MaterialApp } from 'svelte-materialify'
 </script>
 
@@ -35,4 +36,5 @@
 </style>
 
 <MaterialApp>
+  <TapWire />
 </MaterialApp>

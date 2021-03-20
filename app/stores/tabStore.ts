@@ -41,7 +41,7 @@ function getDefaultTabConfig(): TabConfigModel {
         id: '0',
         selectedRpc: undefined,
         targetGrpcServerUrl: 'localhost:50053',
-        rpcOperationMode: RpcOperationMode.monitor,
+        rpcOperationMode: RpcOperationMode.mockRpc,
         requestEditorState: { text: '', eventEmitter: new EditorEventEmitter(), metadata: '{}', dataFlowMode: EditorDataFlowMode.passThrough },
         responseEditorState: { text: '', eventEmitter: new EditorEventEmitter(), dataFlowMode: EditorDataFlowMode.passThrough },
         mockRpcEditorText: '{}'
