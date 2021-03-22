@@ -36,5 +36,5 @@
     {theme}
     {lang}
     width={'100%'}
-    height="620" />
+    height="800" />
 </Row>

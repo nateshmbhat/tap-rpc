@@ -47,7 +47,7 @@
 {:else}
   <Folder
     on:fileClick={e => onRpcClick(e.detail)}
-    name="Tap Wire"
+    name="Tap rpc"
     expanded
     files={protoFilesToRpcSelectorModel(protoFiles)}
   />

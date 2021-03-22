@@ -20,10 +20,10 @@ export interface RequestResponseEditorModel {
 
 function createAppConfigStore() {
   const { set, subscribe, update } = writable<AppConfigModel>({
-    proxyGrpcServerUrl: 'localhost:50051',
+    proxyGrpcServerUrl: '0.0.0.0:50051',
     proxyGrpcServer: null,
     testGrpcServer: null,
-    testGrpcServerUrl: 'localhost:50053',
+    testGrpcServerUrl: '0.0.0.0:9090',
   });
 
   return {

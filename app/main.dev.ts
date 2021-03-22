@@ -1,5 +1,6 @@
 import { BrowserWindow } from "electron";
 import type { IpcMainChannelInterface } from "./commons/ipc/ipcChannelInterface";
+import { NetworkUtil } from "./commons/utils";
 import { GrpcServerChannel, ProtoImporterChannel } from "./main_process/ipc/ipcMainChannels";
 
 /**
@@ -14,9 +15,7 @@ import { GrpcServerChannel, ProtoImporterChannel } from "./main_process/ipc/ipcM
 const {
   app,
   ipcMain,
-  ipcRenderer
 } = require('electron');
-const MenuBuilder = require('./menu');
 
 class Main {
   private mainWindow: BrowserWindow | null = null;
@@ -71,10 +70,10 @@ class Main {
     this.mainWindow = new BrowserWindow({
       show: false,
       width: 1324,
-      height: 728,
+      height: 800,
       backgroundColor: "#f0f2f5",
       //@ts-ignore : webpack defined constant
-      title: __APP_DISPLAY_NAME,
+      title: `${__APP_DISPLAY_NAME} @ ${NetworkUtil.getLocalIp()}:50051`,
       webPreferences: {
         nodeIntegration: true,
         enableRemoteModule: true
@@ -99,8 +98,6 @@ class Main {
       this.mainWindow = null;
     });
 
-    const menuBuilder = new MenuBuilder(this.mainWindow);
-    menuBuilder.buildMenu();
   }
 
   private registerIpcChannels(ipcChannels: IpcMainChannelInterface[]) {

@@ -24,6 +24,6 @@
       {theme}
       {width}
       {lang}
-      height="620" />
+      height="800" />
   </Col>
 </Row>
