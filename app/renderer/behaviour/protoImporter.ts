@@ -87,11 +87,8 @@ function parseServices(proto: Proto) {
   return services;
 }
 
-export async function importProtoResolvePath(): Promise<string[]> {
-  const result = await remote.dialog.showOpenDialog(remote.getCurrentWindow(), {
-    properties: ['openDirectory'],
-    filters: []
-  });
+export async function loadProtoResolvePathFromFilePicker(): Promise<string[]> {
+  const result = await FileSystemUtil.getProtoResolvePathsFromFilePicker() 
   if (result.canceled) return []
   else return result.filePaths
 }

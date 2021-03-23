@@ -15,11 +15,7 @@ function createProtoFilesStore() {
 }
 
 function createProtoImportPathsStore() {
-  const { subscribe, set, update } = writable<string[]>([path.join(
-    //@ts-ignore
-    __static,
-    'sample',
-  )]);
+  const { subscribe, set, update } = writable<string[]>([]);
   return {
     subscribe,
     setProtoImportPaths: (protoPaths: string[]) => {
@@ -27,7 +23,6 @@ function createProtoImportPathsStore() {
     },
     addPath: (newProtoPath: string) => update((paths) => [...paths, newProtoPath]),
     addPaths: (newProtoPaths: string[]) => update((paths) => [...paths, ...newProtoPaths]),
-    getValue: async () => new Promise<string[]>((res, rej) => subscribe(config => res(config))()),
   };
 }
 

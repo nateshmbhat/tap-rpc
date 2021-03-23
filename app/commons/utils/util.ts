@@ -52,21 +52,30 @@ export class FileSystemUtil {
         });
         return result;
     }
+
+    static async getProtoResolvePathsFromFilePicker(): Promise<OpenDialogReturnValue> {
+        const result = await remote.dialog.showOpenDialog(remote.getCurrentWindow(), {
+            properties: ['openDirectory'],
+            buttonLabel: 'Add Proto Path',
+            filters: []
+        });
+        return result;
+    }
 }
 
 
 export class FakerUtil {
     static generateFakeJsonObject(object: { [key: string]: any }): Object {
-        for (let key in object) {
-            const value = object[key]
+        const result: { [key: string]: any } = {}
+        for (let [key, value] of Object.entries(object)) {
             if (typeof value === 'string') {
-                object[key] = this.getStringValue(key, value)
+                result[key] = this.getStringValue(key, value)
             }
             else if (typeof value === 'boolean') {
-                object[key] = faker.random.boolean()
+                result[key] = faker.random.boolean()
             }
             else if (typeof value === 'number') {
-                object[key] = this.getNumberValue(key, value)
+                result[key] = this.getNumberValue(key, value)
             }
 
             else if (Array.isArray(value) && value.length > 0) {
@@ -83,20 +92,18 @@ export class FakerUtil {
                         newArray[arrayIndex] = this.getNumberValue(key, arrayItem)
                     }
                     else if (typeof arrayItem === 'object') {
-                        const newArrayItem = immer(arrayItem, (draft: any) => {
-                            this.generateFakeJsonObject(draft)
-                        })
+                        const newArrayItem = this.generateFakeJsonObject(arrayItem)
                         newArray[arrayIndex] = newArrayItem
                     }
                 }
-                object[key] = newArray
+                result[key] = newArray
             }
 
             else if (typeof value === 'object') {
-                object[key] = this.generateFakeJsonObject(value)
+                result[key] = this.generateFakeJsonObject(value)
             }
         }
-        return object
+        return result
     }
 
     private static getStringValue(key: string, value: string): string {
@@ -198,7 +205,7 @@ export class FakerUtil {
             case 'body': return faker.lorem.paragraph()
         }
 
-        if(key.endsWith('id')) return faker.random.uuid()
+        if (key.endsWith('id')) return faker.random.uuid()
         return faker.random.word()
     }
 

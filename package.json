@@ -2,12 +2,62 @@
   "name": "tap-rpc",
   "version": "1.0.0",
   "description": "The tool you need for your GRPC clients and backends",
+  "displayName": "Tap Rpc",
   "main": "index.js",
   "scripts": {
     "dev": "cross-env START_HOT=1 yarn start-server-dev",
     "start": "cross-env NODE_ENV=production electron ./app/",
     "start-server-dev": "cross-env NODE_ENV=development node --experimental-worker --trace-warnings ./node_modules/webpack-dev-server/bin/webpack-dev-server --config webpack.config.renderer.dev.js",
     "start-main-dev": "cross-env HOT=1 NODE_ENV=development webpack --config webpack.config.renderer.dev.js && cross-env HOT=1 NODE_ENV=development electron ./app/main.dev.bundle.js"
+  },
+  "build": {
+    "productName": "Tap Rpc",
+    "appId": "com.geekytech.taprpc",
+    "extraResources": [
+      {
+        "from": "static",
+        "to": "static"
+      }
+    ],
+    "files": [
+      "dist/",
+      "node_modules/",
+      "app.html",
+      "main.prod.js",
+      "main.prod.js.map",
+      "package.json"
+    ],
+    "dmg": {
+      "contents": [
+        {
+          "x": 410,
+          "y": 150,
+          "type": "link",
+          "path": "/Applications"
+        },
+        {
+          "x": 130,
+          "y": 150,
+          "type": "file"
+        }
+      ]
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ]
+    },
+    "linux": {
+      "target": [
+        "deb",
+        "AppImage"
+      ],
+      "category": "Development"
+    },
+    "directories": {
+      "buildResources": "resources",
+      "output": "release"
+    }
   },
   "repository": {
     "type": "git",

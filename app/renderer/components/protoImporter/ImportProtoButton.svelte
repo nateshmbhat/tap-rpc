@@ -11,6 +11,7 @@
   import { appConfigStore, protoImportPathsStore } from '../../../stores'
   import { FileSystemUtil } from '../../../commons/utils/util'
   import { startTestGrpcServer } from '../testing/GrpcTestServer'
+  import { get } from 'svelte/store'
   var protoLoader = require('@grpc/proto-loader')
 
   var dispatcher = createEventDispatcher<{ onProtoLoaded: ProtoFile[] }>()
@@ -60,7 +61,7 @@
 
   async function importProtoFiles() {
     const appConfig = await appConfigStore.getValue()
-    const protoImportPaths = await protoImportPathsStore.getValue()
+    const protoImportPaths = get(protoImportPathsStore)
     const selectedFilesResult = await FileSystemUtil.getProtoFilesFromFilePicker()
     if (selectedFilesResult.canceled) return
 
