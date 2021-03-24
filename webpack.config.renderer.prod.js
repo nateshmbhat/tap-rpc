@@ -1,54 +1,49 @@
-/* eslint global-require: 0, import/no-dynamic-require: 0 */
-
 /**
- * Build config for development electron renderer process that uses
- * Hot-Module-Replacement
- *
- * https://webpack.js.org/concepts/hot-module-replacement/
+ * Build config for electron renderer process
  */
 
 const path = require('path');
 const webpack = require('webpack');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+const CopyPlugin = require('copy-webpack-plugin');
 const merge = require('webpack-merge');
-const {
-  spawn
-} = require('child_process');
+const TerserPlugin = require('terser-webpack-plugin');
 const baseConfig = require('./webpack.config.base');
 const CheckNodeEnv = require('./internals/scripts/CheckNodeEnv');
 
-CheckNodeEnv('development');
-
-const port = process.env.PORT || 1212;
-const publicPath = `http://localhost:${port}/dist`;
-
+CheckNodeEnv('production');
 
 module.exports = merge.smart(baseConfig, {
-  devtool: 'inline-source-map',
+  devtool: 'source-map',
 
-  mode: 'development',
+  mode: 'production',
 
   target: 'electron-renderer',
 
   entry: {
-    renderer: [
-      `webpack-dev-server/client?http://localhost:${port}/`,
-      'webpack/hot/only-dev-server',
-      path.join(__dirname, 'app/index.ts')
-    ],
-    main: './app/main.dev.ts'
+    'app': './app/index',
+    // 'about': './app/about/about-window-renderer'
   },
 
   output: {
-    publicPath: `http://localhost:${port}/dist/`,
-    path: path.join(__dirname,'app'),
-    filename: '[name].dev.bundle.js'
+    path: path.join(__dirname, 'app/dist'),
+    publicPath: './dist/',
+    filename: '[name].renderer.prod.js'
   },
 
   module: {
-    rules: [{
+    rules: [
+      // Extract all .global.css to style.css as is
+      {
         test: /\.global\.css$/,
-        use: [{
-            loader: 'style-loader'
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              publicPath: './'
+            }
           },
           {
             loader: 'css-loader',
@@ -58,56 +53,66 @@ module.exports = merge.smart(baseConfig, {
           }
         ]
       },
+      // Pipe other styles through css modules and append to style.css
       {
         test: /^((?!\.global).)*\.css$/,
-        use: [{
-            loader: 'style-loader'
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader
           },
           {
             loader: 'css-loader',
             options: {
               modules: true,
-              sourceMap: true,
-              importLoaders: 1,
-              localIdentName: '[name]__[local]__[hash:base64:5]'
+              localIdentName: '[name]__[local]__[hash:base64:5]',
+              sourceMap: true
             }
           }
         ]
       },
-      // SASS support - compile all .global.scss files and pipe it to style.css
+      // Add SASS support  - compile all .global.scss files and pipe it to style.css
       {
         test: /\.global\.(scss|sass)$/,
-        use: [{
-            loader: 'style-loader'
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader
           },
           {
             loader: 'css-loader',
             options: {
+              sourceMap: true,
+              importLoaders: 1
+            }
+          },
+          {
+            loader: 'sass-loader',
+            options: {
+              sourceMap: true
+            }
+          }
+        ]
+      },
+      // Add SASS support  - compile all other .scss files and pipe it to style.css
+      {
+        test: /^((?!\.global).)*\.(scss|sass)$/,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader
+          },
+          {
+            loader: 'css-loader',
+            options: {
+              modules: true,
+              importLoaders: 1,
+              localIdentName: '[name]__[local]__[hash:base64:5]',
               sourceMap: true
             }
           },
           {
-            loader: 'sass-loader'
-          }
-        ]
-      },
-      // SASS support - compile all other .scss files and pipe it to style.css
-      {
-        test: /^((?!\.global).)*\.(scss|sass)$/,
-        use: [{
-            loader: 'style-loader'
-          },
-          {
-            loader: 'css-loader',
+            loader: 'sass-loader',
             options: {
-              modules: true,
-              sourceMap: true,
-              importLoaders: 1,
-              localIdentName: '[name]__[local]__[hash:base64:5]'
+              sourceMap: true
             }
-          },
-          {
-            loader: 'sass-loader'
           }
         ]
       },
@@ -168,9 +173,24 @@ module.exports = merge.smart(baseConfig, {
     ]
   },
 
-  plugins: [
-    new webpack.NoEmitOnErrorsPlugin(),
+  optimization: {
+    minimizer: [
+      new TerserPlugin({
+        parallel: true,
+        sourceMap: true
+      }),
+      new OptimizeCSSAssetsPlugin({
+        cssProcessorOptions: {
+          map: {
+            inline: false,
+            annotation: true
+          }
+        }
+      })
+    ]
+  },
 
+  plugins: [
     /**
      * Create global constants which can be configured at compile time.
      *
@@ -179,53 +199,26 @@ module.exports = merge.smart(baseConfig, {
      *
      * NODE_ENV should be production so that modules do not perform certain
      * development checks
-     *
-     * By default, use 'development' as NODE_ENV. This can be overriden with
-     * 'staging', for example, by changing the ENV variables in the npm scripts
      */
     new webpack.EnvironmentPlugin({
-      NODE_ENV: 'development'
+      NODE_ENV: 'production'
     }),
-    new webpack.LoaderOptionsPlugin({
-      debug: true
+
+    new MiniCssExtractPlugin({
+      filename: 'style.css'
+    }),
+
+    new CopyPlugin([
+      { from: './app/about/about.css', to: 'about.css' },
+    ]),
+
+    new BundleAnalyzerPlugin({
+      analyzerMode:
+        process.env.OPEN_ANALYZER === 'true' ? 'server' : 'disabled',
+      openAnalyzer: process.env.OPEN_ANALYZER === 'true'
     }),
     new webpack.DefinePlugin({
-      __static: `"${path.join(process.cwd(), "static").replace(/\\/g, "\\\\")}"`,
+      __static: `process.resourcesPath + "/static"`
     }),
-  ],
-
-  node: {
-    __dirname: false,
-    __filename: false
-  },
-
-  devServer: {
-    port,
-    publicPath,
-    compress: true,
-    // writeToDisk : true, 
-    // noInfo: true,
-    // stats: 'errors-only',
-    inline: true,
-    lazy: false,
-    hot: true,
-    headers: { 'Access-Control-Allow-Origin': '*' },
-    contentBase: path.join(__dirname, 'dist'),
-    historyApiFallback: {
-      verbose: true,
-      disableDotRule: false
-    },
-    before() {
-      if (process.env.START_HOT) {
-        console.log('Starting Main Process...');
-        spawn('npm', ['run', 'start-main-dev'], {
-          shell: true,
-          env: process.env,
-          stdio: 'inherit'
-        })
-          .on('close', code => process.exit(code))
-          .on('error', spawnError => console.error(spawnError));
-      }
-    }
-  }
+  ]
 });

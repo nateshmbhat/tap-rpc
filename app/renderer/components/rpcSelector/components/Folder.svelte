@@ -1,13 +1,15 @@
 <script lang="ts">
   import File from './File.svelte'
   import { ElectronUtil } from '../../../../commons/utils/electron_util'
-  import { createEventDispatcher} from 'svelte'
+  import { createEventDispatcher, onMount} from 'svelte'
   import type { RpcProtoInfo } from '../../../behaviour'
-import type { RpcSelectorFileType } from '../../types/types';
+  import type { RpcSelectorFileType } from '../../types/types';
 
   export let expanded = false
   export let name: string
   export let files: RpcSelectorFileType[] = []
+  let folderIconLocation =  `url(${ElectronUtil.getResourcePath()}/assets/icons/folder.svg)`
+  let folderOpenIconLocation =  `url(${ElectronUtil.getResourcePath()}/assets/icons/folder-open.svg)`
 
   function toggle() {
     expanded = !expanded
@@ -18,8 +20,7 @@ import type { RpcSelectorFileType } from '../../types/types';
 
 <span
   id="folder-icon"
-  style="--folderIcon: url({ElectronUtil.getResourcePath()}/icons/folder.svg);--folderOpenIcon:
-  url({ElectronUtil.getResourcePath()}/icons/folder-open.svg)"
+  style="--folderIcon: {folderIconLocation} ;--folderOpenIcon:{folderOpenIconLocation}"
   class:expanded
   on:click={toggle}
 >

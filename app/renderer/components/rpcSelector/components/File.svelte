@@ -6,7 +6,7 @@
 
 <span
   on:click
-  style="background-image: url({ElectronUtil.getResourcePath()}/icons/file.svg)"
+  style="background-image: url({ElectronUtil.getResourcePath()}/assets/icons/file.svg)"
 >
   {name}
 </span>
