@@ -18,7 +18,7 @@
     "package-all": "yarn build && electron-builder build -mwl",
     "package-linux": "yarn build && electron-builder build --linux",
     "package-win": "yarn build && electron-builder build --win --x64",
-    "postinstall": "patch-package && node internals/scripts/CheckNativeDep.js && electron-builder install-app-deps package.json",
+    "postinstall": "node internals/scripts/CheckNativeDep.js && electron-builder install-app-deps",
     "prestart": "yarn build"
   },
   "build": {
