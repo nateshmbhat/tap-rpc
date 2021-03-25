@@ -30,8 +30,8 @@
         "to": "static"
       },
       {
-        "from" : "resources/assets",
-        "to" : "assets"
+        "from": "resources/assets",
+        "to": "assets"
       }
     ],
     "extraFiles": [
