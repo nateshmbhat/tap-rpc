@@ -6,7 +6,6 @@ import { EditorDataFlowMode } from '../../stores/tabStore';
 import { GrpcClientManager } from './grpcClientManager';
 import type { RpcProtoInfo, ResponseInfo } from './models';
 import { EditorEventType } from './responseStateController';
-import { GRPCEventType, GRPCRequest, ResponseMetaInformation } from './sendRequest';
 
 interface RequestInterceptorCallback {
     metadata: Metadata,

@@ -6,7 +6,7 @@ const path = require('path')
 const webpack = require('webpack')
 const fs = require('fs')
 const pkgDep = require('./package.json')
-
+const sveltePreConfig = require('./svelte.config')
 
 /** @type {webpack.Configuration} */
 module.exports = {
@@ -17,14 +17,7 @@ module.exports = {
         // exclude: /node_modules/,
         use: {
           loader: 'svelte-loader',
-          options: {
-            preprocess: require('svelte-preprocess')({
-              scss: {
-                includePaths: ['app/theme'],
-              },
-            }),
-            hotReload: false,
-          },
+          options : sveltePreConfig ,
         },
       },
       {
@@ -65,6 +58,7 @@ module.exports = {
       BUG_REPORT_URL: JSON.stringify(pkgDep.bugs.url),
       VERSION: JSON.stringify(pkgDep.version),
       __APP_DISPLAY_NAME: JSON.stringify(pkgDep.displayName),
+      __REDCOLOR: 'red',
     }),
   ],
 }

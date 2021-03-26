@@ -3,34 +3,34 @@
   import { MaterialApp } from 'svelte-materialify'
 </script>
 
-<style>
-  :global(html, body) {
+<style global>
+  html, body {
     position: relative;
     width: 100%;
     height: 100%;
   }
 
-  :global(label) {
+  label {
     display: block;
     user-select: none;
   }
 
-  :global(.d-flex) {
+  .d-flex {
     display: flex;
   }
 
-  :global(.row) {
+  .row {
     display: flex;
     flex-direction: row;
   }
-  :global(.col) {
+  .col {
     display: flex;
     flex-direction: column;
   }
-  :global(.center) {
+  .center {
     text-align: center;
   }
-  :global(.border){
+  .border{
     border: 1px solid black;
   }
 </style>
