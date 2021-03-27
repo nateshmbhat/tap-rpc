@@ -1,31 +1,21 @@
 <script lang="ts">
   import File from './File.svelte'
-  import { ElectronUtil } from '../../../../commons/utils/electron_util'
-  import { createEventDispatcher, onMount} from 'svelte'
+  import { createEventDispatcher, onMount } from 'svelte'
   import type { RpcProtoInfo } from '../../../behaviour'
-  import type { RpcSelectorFileType } from '../../types/types';
+  import type { RpcSelectorFileType } from '../../types/types'
 
   export let expanded = false
   export let name: string
   export let files: RpcSelectorFileType[] = []
-  let folderIconLocation =  `url(${ElectronUtil.getResourcePath()}/assets/icons/folder.svg)`
-  let folderOpenIconLocation =  `url(${ElectronUtil.getResourcePath()}/assets/icons/folder-open.svg)`
 
   function toggle() {
     expanded = !expanded
   }
 
-  const dispatch = createEventDispatcher<{fileClick:RpcProtoInfo}>()
+  const dispatch = createEventDispatcher<{ fileClick: RpcProtoInfo }>()
 </script>
 
-<span
-  id="folder-icon"
-  style="--folderIcon: {folderIconLocation} ;--folderOpenIcon:{folderOpenIconLocation}"
-  class:expanded
-  on:click={toggle}
->
-  {name}
-</span>
+<span class:expanded on:click={toggle}>{name}</span>
 
 {#if expanded}
   <ul>
@@ -47,7 +37,7 @@
 <style>
   span {
     padding: 0 0 0 1.5em;
-    background: var(--folderIcon) 0 0.1em no-repeat;
+    background: url(__ASSET_PATH__/icons/folder.svg) 0 0.1em no-repeat;
     background-size: 1em 1em;
     font-weight: bold;
     cursor: pointer;
@@ -55,7 +45,7 @@
   }
 
   .expanded {
-    background-image: var(--folderOpenIcon);
+    background-image: url(__ASSET_PATH__/icons/folder-open.svg);
   }
 
   ul {

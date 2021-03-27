@@ -1,12 +1,11 @@
 <script lang="ts">
-  import { ElectronUtil } from "../../../../commons/utils/electron_util";
   export let name: string;
   $: fileExtension = name.slice(name.lastIndexOf(".") + 1);
 </script>
 
 <span
   on:click
-  style="background-image: url({ElectronUtil.getResourcePath()}/assets/icons/file.svg)"
+  style="background-image: url(__ASSET_PATH__/icons/file.svg)"
 >
   {name}
 </span>

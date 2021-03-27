@@ -73,7 +73,7 @@ class Main {
       height: 800,
       backgroundColor: "#f0f2f5",
       //@ts-ignore : webpack defined constant
-      title: `${__APP_DISPLAY_NAME} @ ${NetworkUtil.getLocalIp()}:50051`,
+      title: `${__APP_DISPLAY_NAME__} @ ${NetworkUtil.getLocalIp()}:50051`,
       webPreferences: {
         nodeIntegration: true,
         enableRemoteModule: true

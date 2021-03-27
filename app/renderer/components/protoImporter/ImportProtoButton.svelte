@@ -17,7 +17,7 @@
   var dispatcher = createEventDispatcher<{ onProtoLoaded: ProtoFile[] }>()
   const SAMPLE_PROT_PATH = path.join(
     //@ts-ignore
-    __static,
+    __STATIC_PATH__,
     'sample',
     'greeter-service.proto',
   )

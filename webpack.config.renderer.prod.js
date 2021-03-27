@@ -2,18 +2,18 @@
  * Build config for electron renderer process
  */
 
-const path = require('path');
-const webpack = require('webpack');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
-const CopyPlugin = require('copy-webpack-plugin');
-const merge = require('webpack-merge');
-const TerserPlugin = require('terser-webpack-plugin');
-const baseConfig = require('./webpack.config.base');
-const CheckNodeEnv = require('./internals/scripts/CheckNodeEnv');
+const path = require('path')
+const webpack = require('webpack')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
+const CopyPlugin = require('copy-webpack-plugin')
+const merge = require('webpack-merge')
+const TerserPlugin = require('terser-webpack-plugin')
+const baseConfig = require('./webpack.config.base')
+const CheckNodeEnv = require('./internals/scripts/CheckNodeEnv')
 
-CheckNodeEnv('production');
+CheckNodeEnv('production')
 
 module.exports = merge.smart(baseConfig, {
   devtool: 'source-map',
@@ -23,18 +23,38 @@ module.exports = merge.smart(baseConfig, {
   target: 'electron-renderer',
 
   entry: {
-    'app': './app/index',
+    app: './app/index',
     // 'about': './app/about/about-window-renderer'
   },
 
   output: {
     path: path.join(__dirname, 'app/dist'),
     publicPath: './dist/',
-    filename: '[name].renderer.prod.js'
+    filename: '[name].renderer.prod.js',
   },
 
   module: {
     rules: [
+      {
+        test: /\.(html|svelte|ts|tsx|js|json|mjs)$/,
+        use: {
+          loader: 'string-replace-loader',
+          options: {
+            multiple: [
+              {
+                search: '__STATIC_PATH__',
+                replace: `process.resourcesPath + "/static"`,
+                flags: 'g',
+              },
+              {
+                search: '__ASSET_PATH__',
+                replace: `../../assets`, // the default location during prod will be inside resources/app.asar/app
+                flags: 'g',
+              },
+            ],
+          },
+        },
+      },
       // Extract all .global.css to style.css as is
       {
         test: /\.global\.css$/,
@@ -42,62 +62,62 @@ module.exports = merge.smart(baseConfig, {
           {
             loader: MiniCssExtractPlugin.loader,
             options: {
-              publicPath: './'
-            }
+              publicPath: './',
+            },
           },
           {
             loader: 'css-loader',
             options: {
-              sourceMap: true
-            }
-          }
-        ]
+              sourceMap: true,
+            },
+          },
+        ],
       },
       // Pipe other styles through css modules and append to style.css
       {
         test: /^((?!\.global).)*\.css$/,
         use: [
           {
-            loader: MiniCssExtractPlugin.loader
+            loader: MiniCssExtractPlugin.loader,
           },
           {
             loader: 'css-loader',
             options: {
               modules: true,
               localIdentName: '[name]__[local]__[hash:base64:5]',
-              sourceMap: true
-            }
-          }
-        ]
+              sourceMap: true,
+            },
+          },
+        ],
       },
       // Add SASS support  - compile all .global.scss files and pipe it to style.css
       {
         test: /\.global\.(scss|sass)$/,
         use: [
           {
-            loader: MiniCssExtractPlugin.loader
+            loader: MiniCssExtractPlugin.loader,
           },
           {
             loader: 'css-loader',
             options: {
               sourceMap: true,
-              importLoaders: 1
-            }
+              importLoaders: 1,
+            },
           },
           {
             loader: 'sass-loader',
             options: {
-              sourceMap: true
-            }
-          }
-        ]
+              sourceMap: true,
+            },
+          },
+        ],
       },
       // Add SASS support  - compile all other .scss files and pipe it to style.css
       {
         test: /^((?!\.global).)*\.(scss|sass)$/,
         use: [
           {
-            loader: MiniCssExtractPlugin.loader
+            loader: MiniCssExtractPlugin.loader,
           },
           {
             loader: 'css-loader',
@@ -105,16 +125,16 @@ module.exports = merge.smart(baseConfig, {
               modules: true,
               importLoaders: 1,
               localIdentName: '[name]__[local]__[hash:base64:5]',
-              sourceMap: true
-            }
+              sourceMap: true,
+            },
           },
           {
             loader: 'sass-loader',
             options: {
-              sourceMap: true
-            }
-          }
-        ]
+              sourceMap: true,
+            },
+          },
+        ],
       },
       // WOFF Font
       {
@@ -123,9 +143,9 @@ module.exports = merge.smart(baseConfig, {
           loader: 'url-loader',
           options: {
             limit: 10000,
-            mimetype: 'application/font-woff'
-          }
-        }
+            mimetype: 'application/font-woff',
+          },
+        },
       },
       // WOFF2 Font
       {
@@ -134,9 +154,9 @@ module.exports = merge.smart(baseConfig, {
           loader: 'url-loader',
           options: {
             limit: 10000,
-            mimetype: 'application/font-woff'
-          }
-        }
+            mimetype: 'application/font-woff',
+          },
+        },
       },
       // TTF Font
       {
@@ -145,14 +165,14 @@ module.exports = merge.smart(baseConfig, {
           loader: 'url-loader',
           options: {
             limit: 10000,
-            mimetype: 'application/octet-stream'
-          }
-        }
+            mimetype: 'application/octet-stream',
+          },
+        },
       },
       // EOT Font
       {
         test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-        use: 'file-loader'
+        use: 'file-loader',
       },
       // SVG Font
       {
@@ -161,33 +181,33 @@ module.exports = merge.smart(baseConfig, {
           loader: 'url-loader',
           options: {
             limit: 10000,
-            mimetype: 'image/svg+xml'
-          }
-        }
+            mimetype: 'image/svg+xml',
+          },
+        },
       },
       // Common Image Formats
       {
         test: /\.(?:ico|gif|png|jpg|jpeg|webp)$/,
-        use: 'url-loader'
-      }
-    ]
+        use: 'url-loader',
+      },
+    ],
   },
 
   optimization: {
     minimizer: [
       new TerserPlugin({
         parallel: true,
-        sourceMap: true
+        sourceMap: true,
       }),
       new OptimizeCSSAssetsPlugin({
         cssProcessorOptions: {
           map: {
             inline: false,
-            annotation: true
-          }
-        }
-      })
-    ]
+            annotation: true,
+          },
+        },
+      }),
+    ],
   },
 
   plugins: [
@@ -201,24 +221,19 @@ module.exports = merge.smart(baseConfig, {
      * development checks
      */
     new webpack.EnvironmentPlugin({
-      NODE_ENV: 'production'
+      NODE_ENV: 'production',
     }),
 
     new MiniCssExtractPlugin({
-      filename: 'style.css'
+      filename: 'style.css',
     }),
 
-    new CopyPlugin([
-      { from: './app/about/about.css', to: 'about.css' },
-    ]),
+    new CopyPlugin([{ from: './app/about/about.css', to: 'about.css' }]),
 
     new BundleAnalyzerPlugin({
       analyzerMode:
         process.env.OPEN_ANALYZER === 'true' ? 'server' : 'disabled',
-      openAnalyzer: process.env.OPEN_ANALYZER === 'true'
+      openAnalyzer: process.env.OPEN_ANALYZER === 'true',
     }),
-    new webpack.DefinePlugin({
-      __static: `process.resourcesPath + "/static"`
-    }),
-  ]
-});
+  ],
+})

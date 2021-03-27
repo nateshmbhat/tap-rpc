@@ -56,7 +56,7 @@ module.exports = merge.smart(baseConfig, {
       DEBUG_PROD: 'false'
     }),
     new webpack.DefinePlugin({
-      __static: `process.resourcesPath + "/static"`
+      __STATIC_PATH__: `process.resourcesPath + "/static"`
     }),
   ],
 

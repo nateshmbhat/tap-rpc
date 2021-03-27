@@ -45,7 +45,20 @@ module.exports = merge.smart(baseConfig, {
   },
 
   module: {
-    rules: [{
+    rules: [
+      {
+        test: /\.(html|svelte|ts|tsx|js|json|mjs)$/,
+        use: {
+          loader: 'string-replace-loader',
+          options: {
+            multiple: [
+              { search: '__STATIC_PATH__', replace: `"${path.join(process.cwd(), "static").replace(/\\/g, "\\\\")}"` , flags :'g' },
+              { search: '__ASSET_PATH__', replace: `${path.join(process.cwd(), "resources").replace(/\\/g, "\\\\")}/assets` , flags :'g' },
+            ],
+          },
+        },
+      },
+      {
         test: /\.global\.css$/,
         use: [{
             loader: 'style-loader'
@@ -188,9 +201,6 @@ module.exports = merge.smart(baseConfig, {
     }),
     new webpack.LoaderOptionsPlugin({
       debug: true
-    }),
-    new webpack.DefinePlugin({
-      __static: `"${path.join(process.cwd(), "static").replace(/\\/g, "\\\\")}"`,
     }),
   ],
 

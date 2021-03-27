@@ -9,9 +9,9 @@ import { FileSystemUtil } from '../../commons/utils/util';
 
 const commonProtosPath = [
   // @ts-ignore
-  path.join(__static),
+  path.join(__STATIC_PATH__),
   // @ts-ignore
-  path.join(__static, '/home/nateshmbhat/Desktop/bloomrpc-svelte/static/sample/'),
+  path.join(__STATIC_PATH__, '/home/nateshmbhat/Desktop/bloomrpc-svelte/static/sample/'),
 ];
 
 

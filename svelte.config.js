@@ -8,6 +8,7 @@ module.exports = {
     scss: {
       includePaths: ['app/theme'],
     },
+    replace : [['__REDCOLOR' , 'red']]
   }),
   hotReload: false,
 }

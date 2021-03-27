@@ -1,6 +1,6 @@
 // @ts-ignore
 import * as Store from "electron-store";
-import type { ProtoFile} from "../behaviour";
+import type { ProtoFile } from "../renderer/behaviour";
 
 const protosStore = new Store<ProtoFile[]>({
   defaults : [],

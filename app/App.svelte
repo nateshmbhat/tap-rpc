@@ -18,7 +18,6 @@
   .d-flex {
     display: flex;
   }
-
   .row {
     display: flex;
     flex-direction: row;

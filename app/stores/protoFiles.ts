@@ -1,6 +1,6 @@
 import { writable } from "svelte/store";
 import type { ProtoFile, RpcProtoInfo } from "../renderer/behaviour/models";
-import { fetchProtoFiles } from "../renderer/disk_storage";
+import { fetchProtoFiles } from "../disk_storage";
 import path from 'path'
 
 function createProtoFilesStore() {
