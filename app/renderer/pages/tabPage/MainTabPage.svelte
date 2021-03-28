@@ -1,7 +1,6 @@
 <script>
   import {
     activeTabConfigStore,
-    requestResponseEditorStore,
     RpcOperationMode,
   } from '../../../stores'
   import TabInitializerPage from './initializerPage/TabInitializerPage.svelte'
@@ -18,21 +17,6 @@
   const changeMode = (e: CustomEvent<number>) => {
     const newMode = allModes[e.detail]
     console.log('new mode = ', newMode)
-
-    const selectedRpc = $activeTabConfigStore.selectedRpc
-    if (selectedRpc != null) {
-      switch (newMode) {
-        case RpcOperationMode.client:
-          requestResponseEditorStore.setRequest(
-            selectedRpc.mockRequestPayloadString,
-          )
-          break
-        case RpcOperationMode.monitor:
-          requestResponseEditorStore.setRequest('')
-          requestResponseEditorStore.setResponse('')
-          break
-      }
-    }
     activeTabConfigStore.setRpcOperationMode(newMode)
   }
 </script>
