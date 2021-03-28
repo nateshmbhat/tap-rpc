@@ -2,8 +2,8 @@
 import * as Store from "electron-store";
 import type { ProtoFile } from "../renderer/behaviour";
 
-const protosStore = new Store<ProtoFile[]>({
-  defaults : [],
+const protosStore = new Store<string[]>({
+  defaults: [],
   name: "protoFiles",
 });
 
@@ -11,14 +11,20 @@ const KEYS = {
   PROTOS: "protoFiles"
 };
 
-export function storeProtoFiles(paths: ProtoFile[]) {
-  protosStore.set(KEYS.PROTOS, paths);
-}
+export abstract class ProtoFilesDiskStore {
+  static setProtoFiles(protoFilePaths: string[]) {
+    protosStore.set(KEYS.PROTOS, protoFilePaths);
+  }
 
-export function fetchProtoFiles(): ProtoFile[] {
-  return protosStore.get(KEYS.PROTOS, []);
-}
+  static addProtoFiles(newProtoFilePaths: string[]) {
+    protosStore.set(KEYS.PROTOS, [newProtoFilePaths, ...this.fetchProtoFiles(),]);
+  }
 
-export function clearProtoFiles() {
-  return protosStore.clear();
+  static fetchProtoFiles(): string[] {
+    return protosStore.get(KEYS.PROTOS, []);
+  }
+
+  static clear() {
+    return protosStore.clear();
+  }
 }

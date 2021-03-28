@@ -2,28 +2,28 @@
 import * as Store from "electron-store";
 import type { Certificate } from "../renderer/behaviour";
 
-const TLSStore = new Store({
-  name: "tls",
+const diskStore = new Store({
+  name: "tlsCert",
 });
-
 
 const TLS_KEYS = {
   CERTIFICATES: 'certificates'
 };
 
+export abstract class TlsCertDiskStore {
+  static storeTLSList(certs: Certificate[]) {
+    diskStore.set(TLS_KEYS.CERTIFICATES, certs);
+  }
 
-export function storeTLSList(certs: Certificate[]) {
-  TLSStore.set(TLS_KEYS.CERTIFICATES, certs);
-}
+  static getTLSList() {
+    const serverCertificate = {
+      useServerCertificate: true,
+      rootCert: { fileName: "Server Certificate", filePath: "" },
+    };
+    return diskStore.get(TLS_KEYS.CERTIFICATES, [serverCertificate]);
+  }
 
-export function getTLSList() {
-  const serverCertificate = {
-    useServerCertificate: true,
-    rootCert: { fileName: "Server Certificate", filePath: "" },
-  };
-  return TLSStore.get(TLS_KEYS.CERTIFICATES, [serverCertificate]);
-}
-
-export function clearTLS() {
-  return TLSStore.clear();
+  static clear() {
+    return diskStore.clear();
+  }
 }

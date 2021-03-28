@@ -4,6 +4,7 @@ import * as path from "path";
 import type { ProtoFile, ProtoService } from './models/models';
 import type { Service } from 'protobufjs';
 import type { ServiceDefinition } from '@grpc/grpc-js';
+import fs from 'fs'
 import { RpcProtoInfo } from './models';
 import { FileSystemUtil } from '../../commons/utils/util';
 
@@ -34,7 +35,9 @@ export async function loadProtoFilesFromFilePicker(importPaths?: string[]): Prom
  */
 //Throws Error when not able to load proto file
 export async function loadProtos(filePaths: string[], importPaths?: string[]): Promise<ProtoFile[]> {
-  const protos = await Promise.all(filePaths.map((fileName) =>
+  const protos = await Promise.all(filePaths.filter((filePath) =>
+    fs.existsSync(filePath)
+  ).map((fileName) =>
     fromFileName(fileName, [
       ...(importPaths ? importPaths : []),
       ...commonProtosPath,
@@ -88,7 +91,7 @@ function parseServices(proto: Proto) {
 }
 
 export async function loadProtoResolvePathFromFilePicker(): Promise<string[]> {
-  const result = await FileSystemUtil.getProtoResolvePathsFromFilePicker() 
+  const result = await FileSystemUtil.getProtoResolvePathsFromFilePicker()
   if (result.canceled) return []
   else return result.filePaths
 }

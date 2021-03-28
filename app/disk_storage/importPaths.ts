@@ -1,23 +1,26 @@
 // @ts-ignore
 import * as Store from "electron-store";
 
-
-const ImportPathsStore = new Store({
+const ImportPathsDiskStore = new Store({
   name: "importPaths",
 });
 
 const KEYS = {
   IMPORT_PATH: "paths"
 };
+export abstract class ProtoPathDiskStore {
+  static setProtoPaths(paths: string[]) {
+    ImportPathsDiskStore.set(KEYS.IMPORT_PATH, paths);
+  }
+  static addProtoPaths(paths: string[]) {
+    ImportPathsDiskStore.set(KEYS.IMPORT_PATH, [...paths, ...this.fetchPaths(),]);
+  }
 
-export function storeImportPaths(paths: string[]) {
-  ImportPathsStore.set(KEYS.IMPORT_PATH, paths);
-}
+  static fetchPaths(): string[] {
+    return ImportPathsDiskStore.get(KEYS.IMPORT_PATH, []);
+  }
 
-export function fetchImportPaths(): string[] {
-  return ImportPathsStore.get(KEYS.IMPORT_PATH, [""]);
-}
-
-export function clearImportPaths() {
-  return ImportPathsStore.clear();
+  static clear() {
+    return ImportPathsDiskStore.clear();
+  }
 }

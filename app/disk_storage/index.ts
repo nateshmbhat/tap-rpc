@@ -1,13 +1,11 @@
-import {clearImportPaths} from './importPaths';
-import { clearProtoFiles } from './protos';
-import {clearTLS} from './tls';
+import { ProtoPathDiskStore } from "./importPaths";
+import { ProtoFilesDiskStore } from "./protos";
+import { TlsCertDiskStore } from "./tls";
 
-export * from './importPaths';
-export * from './protos';
-export * from './tls';
-
-export function clearDiskStore() {
-  clearImportPaths();
-  clearTLS();
-  clearProtoFiles();
+export class ElectronDiskStorage {
+  clearAllDiskStores() {
+    ProtoPathDiskStore.clear();
+    ProtoFilesDiskStore.clear();
+    TlsCertDiskStore.clear();
+  }
 }

@@ -1,10 +1,11 @@
 import { execSync } from "child_process";
 import { profile } from "console";
 import type { IpcMainEvent } from "electron";
-import { loadProtos, ProtoService } from "../../renderer/behaviour";
+import { loadProtos, ProtoFile, ProtoService } from "../../renderer/behaviour";
 import { IpcChannel, IpcMainChannelInterface, IpcRequest } from "../../commons/ipc/ipcChannelInterface";
 import { protoFilesStore } from "../../stores";
 import { startProxyGrpcServer } from "../grpcServer";
+import { get } from "svelte/store";
 
 export class ProtoImporterChannel implements IpcMainChannelInterface {
     getName(): string {
@@ -31,10 +32,10 @@ export class GrpcServerChannel implements IpcMainChannelInterface {
             request.responseChannel = `${this.getName()}_response`;
         }
         const { serverUrl } = request.params
-        var protoFiles = await protoFilesStore.getValue()
+        var protoFiles = get(protoFilesStore)
         var protoServices: ProtoService[] = []
-        
-        protoFiles.forEach(protoFile => protoServices.push(...Object.values(protoFile.services)))
+
+        protoFiles.forEach((protoFile: ProtoFile) => protoServices.push(...Object.values(protoFile.services)))
         startProxyGrpcServer(protoServices)
         event.sender.send(request.responseChannel, {});
     }
