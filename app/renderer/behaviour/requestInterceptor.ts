@@ -1,7 +1,7 @@
 import type { Metadata } from '@grpc/grpc-js'
 import { get } from 'svelte/store';
 import { ProtoUtil } from '../../commons/utils';
-import { activeTabConfigStore, requestResponseEditorStore } from '../../stores';
+import { activeTabConfigStore} from '../../stores';
 import { EditorDataFlowMode } from '../../stores/tabStore';
 import { GrpcClientManager } from './grpcClientManager';
 import type { RpcProtoInfo, ResponseInfo } from './models';
@@ -16,12 +16,12 @@ interface RequestInterceptorCallback {
 
 export function requestInterceptor({ metadata, requestMessage, rpcProtoInfo }: RequestInterceptorCallback): Promise<ResponseInfo> {
     const responsePromise = new Promise<ResponseInfo>(async (resolve, reject) => {
-        const config = await activeTabConfigStore.getValue()
+        const config = get(activeTabConfigStore)
         console.log('metadata : ', metadata)
         console.log('request message : ', requestMessage)
         console.log('rpc protoInfo : ', rpcProtoInfo)
         activeTabConfigStore.setRequestEditorState({
-            ...config.requestEditorState,
+            ...config.monitorRequestEditorState,
             metadata: ProtoUtil.stringify(metadata.getMap()),
             text: ProtoUtil.stringify(requestMessage)
         })
@@ -45,13 +45,13 @@ interface RequestTransformerOutput { requestMessage: Object, metadata: Metadata 
 
 async function requestTransformer(request: RequestTransformerInput): Promise<RequestTransformerOutput> {
     const transformedRequest = await new Promise<RequestTransformerOutput>(async (resolve, reject) => {
-        const activeTab = await activeTabConfigStore.getValue()
-        if (activeTab.requestEditorState.dataFlowMode == EditorDataFlowMode.passThrough) {
+        const activeTab = get(activeTabConfigStore)
+        if (activeTab.monitorRequestEditorState.dataFlowMode == EditorDataFlowMode.passThrough) {
             resolve(request)
         }
-        else if (activeTab.requestEditorState.dataFlowMode == EditorDataFlowMode.liveEdit) {
-            activeTab.requestEditorState.eventEmitter.on(EditorEventType.editingDone, async () => {
-                const newRequestString = get(requestResponseEditorStore).request.text;
+        else if (activeTab.monitorRequestEditorState.dataFlowMode == EditorDataFlowMode.liveEdit) {
+            activeTab.monitorRequestEditorState.eventEmitter.on(EditorEventType.editingDone, async () => {
+                const newRequestString = get(activeTabConfigStore).monitorRequestEditorState.text;
                 const newRequestObject = JSON.parse(newRequestString)
                 resolve({ metadata: request.metadata, requestMessage: newRequestObject });
             })

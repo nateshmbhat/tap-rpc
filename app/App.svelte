@@ -4,6 +4,9 @@
 </script>
 
 <style global>
+  *{
+    box-sizing: border-box;
+  }
   html, body {
     position: relative;
     width: 100%;

@@ -7,6 +7,7 @@ import { FakerUtil, TabUtil } from "../../commons/utils/util";
 import { activeTabConfigStore, appConfigStore, RpcOperationMode, rpcProtoInfosStore } from "../../stores";
 import { GrpcClientManager } from "../behaviour/grpcClientManager";
 import type { RpcProtoInfo } from "../behaviour/models";
+import { get } from "svelte/store";
 
 export class RequestHandlerChannel implements IpcRendererChannelInterface {
     getName(): string {
@@ -25,7 +26,7 @@ export class RequestHandlerChannel implements IpcRendererChannelInterface {
             metadataObject.add(key, value[0])
         })
         const rpcProtoInfo = await ProtoUtil.getMethodRpc(serviceName, methodName)
-        const activeTabConfig = await activeTabConfigStore.getValue()
+        const activeTabConfig = get(activeTabConfigStore)
 
         const rpcTab = await TabUtil.getTabConfigFromRpc(rpcProtoInfo)
         if (rpcTab == undefined || activeTabConfig.id != rpcTab.id) {
@@ -75,7 +76,7 @@ export class RequestHandlerChannel implements IpcRendererChannelInterface {
     }
 
     private async hanldeRequestInMockRpcMode(request: IpcRequest, metadata: Metadata, event: IpcRendererEvent) {
-        const mockResponse = (await activeTabConfigStore.getValue()).mockRpcEditorText
+        const mockResponse = get(activeTabConfigStore).mockRpcEditorText
         event.sender.send(request.responseChannel!, { data: JSON.parse(mockResponse) })
     }
 }

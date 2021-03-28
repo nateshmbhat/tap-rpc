@@ -31,6 +31,7 @@ class GrpcClientManager {
 
         grpcRequest.on(GRPCEventType.END, () => {
             console.warn('GRPC End Event');
+            if (onCallEnd) onCallEnd()
         });
 
         try {
@@ -38,9 +39,8 @@ class GrpcClientManager {
         } catch (e) {
             console.error(e);
             grpcRequest.emit(GRPCEventType.END);
-            if (onCallEnd) onCallEnd()
         }
     }
 }
 
-export {GrpcClientManager}
+export { GrpcClientManager }
