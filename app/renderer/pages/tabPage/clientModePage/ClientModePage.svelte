@@ -4,15 +4,22 @@
   import { Col, Row } from "svelte-materialify/src";
   import GenericEditor from "../../../components/editors/GenericEditor.svelte";
   import { activeTabConfigStore } from "../../../../stores";
+  import { onMount } from "svelte";
 
   $: requestState = $activeTabConfigStore.clientRequestEditorState;
   $: responseState = $activeTabConfigStore.clientResponseEditorState;
+  onMount(() => {
+    activeTabConfigStore.setClientRequestEditorState({
+      ...requestState,
+      text: $activeTabConfigStore.selectedRpc!.mockRequestPayloadString
+    });
+  });
 </script>
 
 <div class="page">
   <ServerConfigController />
   <div class="client-container">
-    <Row style='height:100%;'>
+    <Row style="height:100%;">
       <Col>
         <GenericEditor
           text={requestState.text}
