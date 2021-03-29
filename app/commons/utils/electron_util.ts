@@ -7,6 +7,13 @@ export class ElectronUtil {
             : process.resourcesPath
     }
 
+    static isInRendererProcess() {
+        return window !== undefined
+    }
+    static isInMainProcess() {
+        return window === undefined
+    }
+
     static getAppIconPath() {
         return process.env.HOT
             ? path.join(__dirname, '../resources/icon.ico')

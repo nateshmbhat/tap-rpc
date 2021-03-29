@@ -1,13 +1,30 @@
 <script lang="ts">
-  import TapRpc from './renderer/components/TapRpc.svelte'
-  import { MaterialApp } from 'svelte-materialify'
+  import TapRpc from "./renderer/components/TapRpc.svelte";
+  import { MaterialApp } from "svelte-materialify";
+  import { onMount } from "svelte";
+  import { ProtoFilesDiskStore } from "./disk_storage/protos";
+  import { ProtoUtil } from "./commons/utils";
+  import { protoImportPathsStore } from "./stores";
+
+  onMount(async () => {
+    const protoFilePaths = ProtoFilesDiskStore.fetchProtoFiles();
+    ProtoUtil.loadProtoFilesAndStartServer(
+      protoFilePaths,
+      $protoImportPathsStore
+    );
+  });
 </script>
 
+<MaterialApp>
+  <TapRpc />
+</MaterialApp>
+
 <style global>
-  *{
+  * {
     box-sizing: border-box;
   }
-  html, body {
+  html,
+  body {
     position: relative;
     width: 100%;
     height: 100%;
@@ -32,11 +49,7 @@
   .center {
     text-align: center;
   }
-  .border{
+  .border {
     border: 1px solid black;
   }
 </style>
-
-<MaterialApp>
-  <TapRpc />
-</MaterialApp>

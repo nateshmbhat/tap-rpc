@@ -12,9 +12,6 @@ export abstract class ProtoPathDiskStore {
   static setProtoPaths(paths: string[]) {
     ImportPathsDiskStore.set(KEYS.IMPORT_PATH, paths);
   }
-  static addProtoPaths(paths: string[]) {
-    ImportPathsDiskStore.set(KEYS.IMPORT_PATH, [...paths, ...this.fetchPaths(),]);
-  }
 
   static fetchPaths(): string[] {
     return ImportPathsDiskStore.get(KEYS.IMPORT_PATH, []);

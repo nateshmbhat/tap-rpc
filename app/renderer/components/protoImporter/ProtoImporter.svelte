@@ -2,13 +2,8 @@
   import { loadProtos, ProtoService } from "../../behaviour";
   import path from "path";
   import { Button } from "svelte-materialify/src";
-  import { MainProcessInterface } from "../../ipc/ipcMainProcessInterface";
-  import {
-    appConfigStore,
-    protoFilesStore,
-    protoImportPathsStore
-  } from "../../../stores";
-  import { FileSystemUtil } from "../../../commons/utils/util";
+  import { protoFilesStore, protoImportPathsStore } from "../../../stores";
+  import { FileSystemUtil, ProtoUtil } from "../../../commons/utils/util";
   import { startTestGrpcServer } from "../testing/GrpcTestServer";
   import { get } from "svelte/store";
 
@@ -29,33 +24,16 @@
       protoServices.push(...Object.values(protoFile.services))
     );
     startTestGrpcServer(protoServices);
-    MainProcessInterface.importProtoFromMainProcess([SAMPLE_PROT_PATH]).then(
-      _ => {
-        MainProcessInterface.startProxyGrpcServer(
-          $appConfigStore.proxyGrpcServerUrl
-        );
-      }
-    );
   };
 
   async function importProtoFiles() {
-    const appConfig = get(appConfigStore);
     const protoImportPaths = get(protoImportPathsStore);
     const selectedFilesResult = await FileSystemUtil.getProtoFilesFromFilePicker();
     if (selectedFilesResult.canceled) return;
-
-    const loadedProtoFiles = await loadProtos(
+    ProtoUtil.loadProtoFilesAndStartServer(
       selectedFilesResult.filePaths,
       protoImportPaths
     );
-
-    protoFilesStore.addProtoFiles(loadedProtoFiles);
-    MainProcessInterface.importProtoFromMainProcess(
-      selectedFilesResult.filePaths,
-      protoImportPaths
-    ).then(_ => {
-      MainProcessInterface.startProxyGrpcServer(appConfig.proxyGrpcServerUrl);
-    });
   }
 
   function clearProtoFiles() {

@@ -1,7 +1,7 @@
 import { BrowserWindow } from "electron";
 import type { IpcMainChannelInterface } from "./commons/ipc/ipcChannelInterface";
 import { NetworkUtil } from "./commons/utils";
-import { GrpcServerChannel, ProtoImporterChannel } from "./main_process/ipc/ipcMainChannels";
+import { SetProtoFilesChannel, SetProtoImportPathsChannel } from "./main_process/ipc/ipcMainChannels";
 
 /**
  * This module executes inside of electron's main process. You can start
@@ -106,4 +106,4 @@ class Main {
 }
 
 
-new Main().init([new ProtoImporterChannel(), new GrpcServerChannel()])
+new Main().init([new SetProtoImportPathsChannel(), new SetProtoFilesChannel()])

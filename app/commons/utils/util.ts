@@ -1,11 +1,10 @@
 import { remote } from "electron";
 import type { OpenDialogReturnValue } from "electron/main";
-import type { RpcProtoInfo } from "../../renderer/behaviour";
-import { servicesStore } from "../../stores";
+import { loadProtos, RpcProtoInfo } from "../../renderer/behaviour";
+import { appConfigStore, protoFilesStore, servicesStore } from "../../stores";
 import faker from 'faker';
 import { TabConfigModel, tabListConfigStore } from "../../stores/tabStore";
 import { get } from "svelte/store";
-import immer from 'immer'
 
 export class ProtoUtil {
     static async getMethodRpc(serviceName: string, methodName: string): Promise<RpcProtoInfo> {
@@ -23,6 +22,14 @@ export class ProtoUtil {
                 rej('could not find any method with method name : ' + methodName)
             }
         })
+    }
+    static async loadProtoFilesAndStartServer(filePaths: string[], importPaths: string[]) {
+        const protoFiles = get(protoFilesStore).map(pf => pf.proto.filePath)
+        filePaths = filePaths.filter((fp) => protoFiles.indexOf(fp)<0)
+        if (filePaths.length == 0) return
+        const uniqueProtoFilePaths = [...new Set([...filePaths, ...protoFiles])];
+        const loadedProtoFiles = await loadProtos(uniqueProtoFilePaths, importPaths);
+        protoFilesStore.addProtoFiles(loadedProtoFiles);
     }
 
     static stringify(message: any, indentSpace = 2): string {
