@@ -2,17 +2,19 @@ import { IpcChannel } from "../../commons/ipc/ipcChannelInterface"
 import { IpcMainService } from "./ipcMainService"
 
 export class MainProcessInterface {
-    static importProtoFromMainProcess<T>(protoFilePaths: string[], resolvePaths: string[] = []): Promise<T> {
-        return IpcMainService.send<T>(IpcChannel.importProto, {
+    static startServer<T>(protoFilePaths: string[]): Promise<T> {
+        return IpcMainService.send<T>(IpcChannel.startServer, {
             params: {
-                protoFilePaths, resolvePaths
+                protoFilePaths
             }
         })
     }
 
-    static startProxyGrpcServer<T>(serverUrl: string): Promise<T> {
-        return IpcMainService.send<T>(IpcChannel.startProxyGrpcServer, {
-            params: { serverUrl }
+    static setProtoImportPaths<T>(folderPaths: string[]): Promise<T> {
+        return IpcMainService.send<T>(IpcChannel.setProtoImportPaths, {
+            params: {
+                folderPaths
+            }
         })
     }
 }

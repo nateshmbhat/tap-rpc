@@ -15,7 +15,7 @@
   };
   const changeResponseMode = async (enableDataEdit: boolean) => {
     activeTabConfigStore.setResponseEditorState({
-      ...$activeTabConfigStore.monitorRequestEditorState,
+      ...$activeTabConfigStore.monitorResponseEditorState,
       dataFlowMode: enableDataEdit
         ? EditorDataFlowMode.liveEdit
         : EditorDataFlowMode.passThrough
