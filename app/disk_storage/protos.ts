@@ -17,7 +17,7 @@ export abstract class ProtoFilesDiskStore {
   }
 
   static addProtoFiles(newProtoFilePaths: string[]) {
-    protosStore.set(KEYS.PROTOS, [newProtoFilePaths, ...this.fetchProtoFiles(),]);
+    protosStore.set(KEYS.PROTOS, [...newProtoFilePaths, ...this.fetchProtoFiles(),]);
   }
 
   static fetchProtoFiles(): string[] {

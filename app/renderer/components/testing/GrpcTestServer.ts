@@ -3,6 +3,7 @@ import { AppConfigModel, appConfigStore } from '../../../stores';
 import type { ProtoService } from '../../behaviour';
 import { responseInterceptor } from '../../behaviour';
 import { ipcRenderer } from 'electron';
+import { get } from 'svelte/store';
 
 function addGrpcServices(server: grpc.Server | null, serviceProtos: ProtoService[]): void {
     if (server == null) {
@@ -24,7 +25,7 @@ function addGrpcServices(server: grpc.Server | null, serviceProtos: ProtoService
 export const startTestGrpcServer = async (serviceProtos: ProtoService[]): Promise<void> => {
     const grpcServer = new grpc.Server();
     addGrpcServices(grpcServer, serviceProtos)
-    const config = await appConfigStore.getValue()
+    const config = get(appConfigStore)
     if (config.testGrpcServer) {
         console.warn('test server already running. Restarting Server with updated protos');
         config.testGrpcServer.forceShutdown();

@@ -1,8 +1,25 @@
 <script lang="ts">
-  import { Container } from "svelte-materialify/src";
+  import { Container, Divider } from "svelte-materialify/src";
+  import { protoFilesStore } from "../../../../stores";
+import type { ProtoFile } from "../../../behaviour";
+  import ProtoImporter from "../../../components/protoImporter/ProtoImporter.svelte";
+  import ProtoPathImporter from "../../../components/protoPathImporter/ProtoPathImporter.svelte";
   import RpcSelector from "../../../components/rpcSelector/RpcSelector.svelte";
+
+  const onProtoLoaded = (protoFiles: ProtoFile[]) => {
+    console.log(protoFiles);
+  };
 </script>
 
 <Container>
-  <RpcSelector />
+  <ProtoPathImporter />
+  <div class="ma-2" />
+  <Divider />
+  <ProtoImporter />
+
+  <div class='ma-2'>
+    {#if $protoFilesStore.length > 0}
+      <RpcSelector />
+    {/if}
+  </div>
 </Container>

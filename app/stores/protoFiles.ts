@@ -14,8 +14,12 @@ function createProtoFilesStore() {
       ProtoFilesDiskStore.setProtoFiles(protoFiles.map(pf => pf.fileName))
     },
     addProtoFiles: (newProtoFiles: ProtoFile[]) => {
-      update((data) => [...data, ...newProtoFiles])
+      update((data) => [...newProtoFiles, ...data])
       ProtoFilesDiskStore.addProtoFiles(newProtoFiles.map((pf) => pf.fileName))
+    },
+    clearAllProtoFiles: () => {
+      update((_) => [])
+      ProtoFilesDiskStore.clear()
     }
   };
 }

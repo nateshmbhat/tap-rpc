@@ -1,11 +1,8 @@
 <script lang="ts">
   import type { ProtoFile, ProtoService, RpcProtoInfo } from '../../behaviour'
   import { activeTabConfigStore, protoFilesStore } from '../../../stores'
-  import ImportProtoButton from '../protoImporter/ImportProtoButton.svelte'
   import Folder from './components/Folder.svelte'
   import type { RpcSelectorFileType } from '../types/types'
-  import ProtoPathImporter from '../protoPathImporter/ProtoPathImporter.svelte'
-  import { Divider } from 'svelte-materialify/src'
 
   $: protoFiles = $protoFilesStore
 
@@ -22,12 +19,6 @@
       files: [],
     }))
   }
-
-  const onProtoLoaded = (protoFiles: ProtoFile[]) => {
-    console.log(protoFiles)
-    protoFilesStore.setProtoFiles(protoFiles)
-  }
-
   const mapServicesToRpcSelectorModel = (
     services: ProtoService[],
   ): RpcSelectorFileType[] => {
@@ -47,10 +38,12 @@
   ): RpcSelectorFileType[] => {
     let results: RpcSelectorFileType[] = []
     protoFiles.forEach((protoFile) => {
+    const services = getProtoFileServices(protoFile)
+    if(services.length==0) return;
       results.push({
         name: protoFile.fileName,
         type: 'folder',
-        files: mapServicesToRpcSelectorModel(getProtoFileServices(protoFile)),
+        files: mapServicesToRpcSelectorModel(services),
       })
     })
     return results
@@ -61,15 +54,11 @@
   }
 </script>
 
-{#if protoFiles.length == 0}
-  <ProtoPathImporter />
-  <div class="ma-2" />
-  <Divider />
-  <ImportProtoButton on:onProtoLoaded={(e) => onProtoLoaded(e.detail)} />
-{:else}
+{#if protoFiles.length > 0}
   <Folder
-    on:fileClick={(e) => onRpcClick(e.detail)}
-    name="Tap rpc"
+    on:fileClick={e => onRpcClick(e.detail)}
+    name="Proto Files"
     expanded
-    files={protoFilesToRpcSelectorModel(protoFiles)} />
+    files={protoFilesToRpcSelectorModel(protoFiles)}
+  />
 {/if}

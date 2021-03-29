@@ -28,7 +28,6 @@ function createAppConfigStore() {
 
   return {
     subscribe,
-    getValue: async () => new Promise<AppConfigModel>((res, rej) => subscribe(config => res(config))()),
     setConfig: (config: AppConfigModel) => set(config),
     setProxyGrpcServerUrl: (url: string) => update((config) => ({ ...config, proxyGrpcServerUrl: url })),
     setProxyGrpcServer: (server: Server) => update((config) => {
