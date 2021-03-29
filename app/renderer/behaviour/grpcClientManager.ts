@@ -1,5 +1,6 @@
 import { GRPCEventType, GRPCRequest, ResponseMetaInformation } from ".";
 import type { RpcProtoInfo } from "./models";
+import type { GRPCEventEmitter } from "./sendRequest";
 
 
 type OnResponse = (response: object, metaInfo: ResponseMetaInformation) => void
@@ -9,7 +10,7 @@ type OnCallEnd = () => void
 class GrpcClientManager {
     static sendRequest = ({ requestMessage, metadata = '{}', url, rpcProtoInfo, onResponse, onError, onCallEnd }:
         { requestMessage: string, metadata: string, url: string, rpcProtoInfo: RpcProtoInfo, onResponse?: OnResponse, onError?: OnError, onCallEnd?: OnCallEnd }) => {
-        const grpcRequest = new GRPCRequest({
+        const grpcRequest: GRPCEventEmitter = new GRPCRequest({
             inputs: requestMessage,
             metadata,
             url,
