@@ -1,7 +1,7 @@
 import type { Metadata } from '@grpc/grpc-js'
 import { get } from 'svelte/store';
 import { ProtoUtil } from '../../commons/utils';
-import { activeTabConfigStore} from '../../stores';
+import { activeTabConfigStore } from '../../stores';
 import { EditorDataFlowMode } from '../../stores/tabStore';
 import { GrpcClientManager } from './grpcClientManager';
 import type { RpcProtoInfo, ResponseInfo } from './models';
@@ -20,7 +20,7 @@ export function requestInterceptor({ metadata, requestMessage, rpcProtoInfo }: R
         console.log('metadata : ', metadata)
         console.log('request message : ', requestMessage)
         console.log('rpc protoInfo : ', rpcProtoInfo)
-        activeTabConfigStore.setRequestEditorState({
+        activeTabConfigStore.setMonitorRequestEditorState({
             ...config.monitorRequestEditorState,
             metadata: ProtoUtil.stringify(metadata.getMap()),
             text: ProtoUtil.stringify(requestMessage)

@@ -5,7 +5,7 @@ import { protoFilesStore, protoImportPathsStore } from "../../stores";
 import { startProxyGrpcServer } from "../grpcServer";
 import { get } from "svelte/store";
 
-export class SetProtoFilesChannel implements IpcMainChannelInterface {
+export class StartServerChannel implements IpcMainChannelInterface {
     getName(): string {
         return IpcChannel.startServer;
     }
