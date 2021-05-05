@@ -49,7 +49,7 @@
     </div>
   </div>
 </div>
-
+<!-- 
 <div>
   <h5>Metadata</h5>
   <GenericEditor
@@ -63,7 +63,7 @@
       });
     }}
   />
-</div>
+</div> -->
 
 <style>
   .client-container {
