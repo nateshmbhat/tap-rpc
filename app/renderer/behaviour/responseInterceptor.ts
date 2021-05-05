@@ -14,7 +14,7 @@ interface ResponseInterceptorCallback {
 
 export async function responseInterceptor({ responseMessage }: ResponseInterceptorCallback): Promise<ResponseInfo> {
     const activeTabConfig = get(activeTabConfigStore)
-    activeTabConfigStore.setResponseEditorState({ ...activeTabConfig.monitorResponseEditorState, text: ProtoUtil.stringify(responseMessage.data) })
+    activeTabConfigStore.setMonitorResponseEditorState({ ...activeTabConfig.monitorResponseEditorState, text: ProtoUtil.stringify(responseMessage.data) })
     const transformedResponse = await transformResponse({ response: responseMessage })
     return transformedResponse
 }

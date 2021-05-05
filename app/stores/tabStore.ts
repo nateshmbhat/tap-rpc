@@ -48,10 +48,10 @@ function getDefaultTabConfig(): TabConfigModel {
         selectedRpc: undefined,
         targetGrpcServerUrl: 'localhost:9090',
         rpcOperationMode: RpcOperationMode.mockRpc,
-        monitorRequestEditorState: { text: '', eventEmitter: new EditorEventEmitter(), metadata: '{}', dataFlowMode: EditorDataFlowMode.passThrough },
-        clientRequestEditorState: { text: '{}', metadata: '{}' },
+        monitorRequestEditorState: { text: '', eventEmitter: new EditorEventEmitter(), metadata: '', dataFlowMode: EditorDataFlowMode.passThrough },
+        clientRequestEditorState: { text: '{}', metadata: '' },
         monitorResponseEditorState: { text: '', eventEmitter: new EditorEventEmitter(), dataFlowMode: EditorDataFlowMode.passThrough },
-        clientResponseEditorState: { text: '', metadata: '{}' },
+        clientResponseEditorState: { text: '', metadata: '' },
         mockRpcEditorText: '{}'
     });
 }
@@ -148,8 +148,8 @@ function createActiveTabConfigStore() {
         setRpcOperationMode: async (mode: RpcOperationMode) => {
             tabListConfigStore.setActiveTabRpcOperationMode(mode);
         },
-        setRequestEditorState: (editorModel: MonitorRequestEditorModel) => tabListConfigStore.setActiveTabRequestEditorState(editorModel),
-        setResponseEditorState: (editorModel: MonitorResponseEditorModel) => tabListConfigStore.setActiveTabResponseEditorState(editorModel),
+        setMonitorRequestEditorState: (editorModel: MonitorRequestEditorModel) => tabListConfigStore.setActiveTabRequestEditorState(editorModel),
+        setMonitorResponseEditorState: (editorModel: MonitorResponseEditorModel) => tabListConfigStore.setActiveTabResponseEditorState(editorModel),
         setClientRequestEditorState: (editorModel: ClientEditorModel) => tabListConfigStore.setActiveTabClientRequestEditorState(editorModel),
         setClientResponseEditorState: (editorModel: ClientEditorModel) => tabListConfigStore.setActiveTabClientResponseEditorState(editorModel),
         setMockRpcEditorText: (text: string) => tabListConfigStore.setActiveTabMockRpcEditorText(text),

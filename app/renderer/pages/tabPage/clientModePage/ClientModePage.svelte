@@ -49,6 +49,21 @@
     </div>
   </div>
 </div>
+<!-- 
+<div>
+  <h5>Metadata</h5>
+  <GenericEditor
+    text={requestState.metadata}
+    height="300"
+    width='50%'
+    on:textChange={e => {
+      activeTabConfigStore.setClientRequestEditorState({
+        ...requestState,
+        metadata: e.detail
+      });
+    }}
+  />
+</div> -->
 
 <style>
   .client-container {
