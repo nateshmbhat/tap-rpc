@@ -1,0 +1,25 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "manukj",
+      "name": "Manu ",
+      "avatar_url": "https://avatars.githubusercontent.com/u/22499119?v=4",
+      "profile": "https://manukj.github.io/",
+      "contributions": [
+        "design",
+        "test"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "tap-rpc",
+  "projectOwner": "nateshmbhat",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}
