@@ -1,7 +1,4 @@
 <p align="center">
-<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors-)
-<!-- ALL-CONTRIBUTORS-BADGE:END -->
   <img src="resources/icon.png" width="250px">
 </p>
 <h2 align="center">The Tool That Completes GRPC  </h2>
@@ -11,7 +8,10 @@
 [![](https://img.shields.io/github/license/nateshmbhat/tap-rpc)](https://github.com/nateshmbhat/tap-rpc)
 [![](https://img.shields.io/github/languages/code-size/nateshmbhat/tap-rpc)](https://github.com/nateshmbhat/tap-rpc)
 [![](https://img.shields.io/badge/platform-mac,linux,windows-darkgreen)](https://github.com/nateshmbhat/tap-rpc)
-[![](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Fgithub.com%2Fnateshmbhat%2Ftap-rpc)](https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Fnateshmbhat%2Ftap-rpc)
+[![](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Fgithub.com%2Fnateshmbhat%2Ftap-rpc)](https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Fnateshmbhat%2Ftap-rpc)<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors-)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
+  
 
 **Tap Rpc** is a tool that aids in proto based dynamic generation of **mock server**, real time **request/response editor** and provides **client** to significantly speed up work for all of frontend, backend and testers.
 
