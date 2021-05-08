@@ -1,4 +1,7 @@
 <p align="center">
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
   <img src="resources/icon.png" width="250px">
 </p>
 <h2 align="center">The Tool That Completes GRPC  </h2>
@@ -36,3 +39,16 @@
 
 
 ## Contributors :
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tr>
+    <td align="center"><a href="https://manukj.github.io/"><img src="https://avatars.githubusercontent.com/u/22499119?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Manu </b></sub></a><br /><a href="#design-manukj" title="Design">🎨</a> <a href="https://github.com/nateshmbhat/tap-rpc/commits?author=manukj" title="Tests">⚠️</a></td>
+  </tr>
+</table>
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
