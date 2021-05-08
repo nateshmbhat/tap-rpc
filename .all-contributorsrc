@@ -23,6 +23,15 @@
       "contributions": [
         "test"
       ]
+    },
+    {
+      "login": "sahanaprasad",
+      "name": "Sahana Prasad",
+      "avatar_url": "https://avatars.githubusercontent.com/u/42026982?v=4",
+      "profile": "https://github.com/sahanaprasad",
+      "contributions": [
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7,
