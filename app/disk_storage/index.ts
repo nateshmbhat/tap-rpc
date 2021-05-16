@@ -1,6 +1,6 @@
 import { ProtoPathDiskStore } from "./importPaths";
 import { ProtoFilesDiskStore } from "./protos";
-import { TlsCertDiskStore } from "./tls";
+import { TlsCertDiskStore } from "./certificates";
 
 export class ElectronDiskStorage {
   clearAllDiskStores() {

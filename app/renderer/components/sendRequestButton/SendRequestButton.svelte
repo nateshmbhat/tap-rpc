@@ -21,8 +21,9 @@
       metadata: requestModel.metadata,
       url: $activeTabConfigStore.targetGrpcServerUrl,
       rpcProtoInfo: $activeTabConfigStore.selectedRpc!,
+      tlsCertificate: $activeTabConfigStore.tlsCertificate,
       onError: (err, metaInfo) =>
-        setResponseEditorText(ProtoUtil.stringify({ error: e.message })),
+        setResponseEditorText(ProtoUtil.stringify({ error: err.message })),
       onResponse: (response, metaInfo) =>
         setResponseEditorText(ProtoUtil.stringify(response)),
       onCallEnd: () => (requestInProgress = false)
