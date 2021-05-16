@@ -1,5 +1,5 @@
 import { derived, get, writable } from "svelte/store";
-import type { RpcProtoInfo } from "../renderer/behaviour";
+import type { Certificate, RpcProtoInfo } from "../renderer/behaviour";
 import { RpcOperationMode } from "./appConfigStore";
 import { EditorEventEmitter } from "../renderer/behaviour/responseStateController";
 
@@ -10,6 +10,7 @@ export interface TabConfigModel {
     rpcOperationMode: RpcOperationMode;
     monitorRequestEditorState: MonitorRequestEditorModel;
     monitorResponseEditorState: MonitorResponseEditorModel;
+    tlsCertificate?: Certificate,
     clientRequestEditorState: ClientEditorModel;
     clientResponseEditorState: ClientEditorModel;
     mockRpcEditorText: string;
@@ -120,6 +121,12 @@ function createTabListConfigStore() {
             allTabs.push(newTab)
             return { ...config, tabs: allTabs }
         }),
+        setTlsCertificate: (tlsCertificate: Certificate|undefined) => update((config) => {
+            const allTabs = Array.from(config.tabs)
+            const activeTab = config.tabs[config.activeTabIndex]
+            allTabs[config.activeTabIndex] = { ...activeTab, tlsCertificate }
+            return { ...config, tabs: allTabs }
+        }),
         removeTab: (index: number) => update((config) => {
             const allTabs = Array.from(config.tabs)
             let newActiveTab = config.activeTabIndex
@@ -149,6 +156,7 @@ function createActiveTabConfigStore() {
             tabListConfigStore.setActiveTabRpcOperationMode(mode);
         },
         setMonitorRequestEditorState: (editorModel: MonitorRequestEditorModel) => tabListConfigStore.setActiveTabRequestEditorState(editorModel),
+        setTlsCertificate: (tlsCertificate: Certificate|undefined) => tabListConfigStore.setTlsCertificate(tlsCertificate),
         setMonitorResponseEditorState: (editorModel: MonitorResponseEditorModel) => tabListConfigStore.setActiveTabResponseEditorState(editorModel),
         setClientRequestEditorState: (editorModel: ClientEditorModel) => tabListConfigStore.setActiveTabClientRequestEditorState(editorModel),
         setClientResponseEditorState: (editorModel: ClientEditorModel) => tabListConfigStore.setActiveTabClientResponseEditorState(editorModel),
