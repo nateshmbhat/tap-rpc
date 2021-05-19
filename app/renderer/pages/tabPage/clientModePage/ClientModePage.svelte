@@ -14,6 +14,18 @@
       text: $activeTabConfigStore.selectedRpc!.mockRequestPayloadString
     });
   });
+
+  function metaDataButtonClicked() {
+    var content = document.getElementById("meta-data-content");
+
+    if (content == null) return;
+    if (content.style.maxHeight != null && content.style.maxHeight != "0px") {
+      content.style.maxHeight = "0px";
+    } else {
+      content.style.maxHeight = content.scrollHeight + "px";
+    }
+  }
+
 </script>
 
 <div class="page">
@@ -48,21 +60,25 @@
       <SendRequestButton />
     </div>
   </div>
-</div>
 
-<div>
-  <h5>Metadata</h5>
-  <GenericEditor
-    text={requestState.metadata}
-    height="300"
-    width="50%"
-    on:textChange={e => {
-      activeTabConfigStore.setClientRequestEditorState({
-        ...requestState,
-        metadata: e.detail
-      });
-    }}
-  />
+  <button
+    class="primary-color"
+    id="meta-data-button"
+    on:click={metaDataButtonClicked}>Metadata</button
+  >
+
+  <div class="meta-data-Content" id="meta-data-content">
+    <GenericEditor
+      text={requestState.metadata}
+      height="300"
+      on:textChange={e => {
+        activeTabConfigStore.setClientRequestEditorState({
+          ...requestState,
+          metadata: e.detail
+        });
+      }}
+    />
+  </div>
 </div>
 
 <style>
@@ -83,4 +99,24 @@
     display: flex;
     flex-flow: column;
   }
+
+  .meta-data-Content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+    background-color: #f1f1f1;
+  }
+
+  #meta-data-button {
+    cursor: pointer;
+    color: #fff;
+    padding: 8px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 15px;
+    font-weight: bold;
+  }
+
 </style>
