@@ -6,7 +6,7 @@
   import GenericEditor from "../../../components/editors/GenericEditor.svelte";
 
   const changeRequestMode = async (enableDataEdit: boolean) => {
-    activeTabConfigStore.setRequestEditorState({
+    activeTabConfigStore.setMonitorRequestEditorState({
       ...$activeTabConfigStore.monitorRequestEditorState,
       dataFlowMode: enableDataEdit
         ? EditorDataFlowMode.liveEdit
@@ -14,7 +14,7 @@
     });
   };
   const changeResponseMode = async (enableDataEdit: boolean) => {
-    activeTabConfigStore.setResponseEditorState({
+    activeTabConfigStore.setMonitorResponseEditorState({
       ...$activeTabConfigStore.monitorResponseEditorState,
       dataFlowMode: enableDataEdit
         ? EditorDataFlowMode.liveEdit
@@ -40,6 +40,7 @@
 
   $: requestState = $activeTabConfigStore.monitorRequestEditorState;
   $: responseState = $activeTabConfigStore.monitorResponseEditorState;
+
 </script>
 
 <div class="page">
@@ -55,7 +56,7 @@
       <GenericEditor
         text={requestState.text}
         on:textChange={e => {
-          activeTabConfigStore.setRequestEditorState({
+          activeTabConfigStore.setMonitorRequestEditorState({
             ...requestState,
             text: e.detail
           });
@@ -73,7 +74,7 @@
       <GenericEditor
         text={responseState.text}
         on:textChange={e => {
-          activeTabConfigStore.setResponseEditorState({
+          activeTabConfigStore.setMonitorResponseEditorState({
             ...responseState,
             text: e.detail
           });
@@ -89,4 +90,5 @@
     display: flex;
     flex-flow: column;
   }
+
 </style>

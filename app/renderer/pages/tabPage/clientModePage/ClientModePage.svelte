@@ -8,12 +8,23 @@
 
   $: requestState = $activeTabConfigStore.clientRequestEditorState;
   $: responseState = $activeTabConfigStore.clientResponseEditorState;
+
+  let metadataContent: HTMLElement;
   onMount(() => {
     activeTabConfigStore.setClientRequestEditorState({
       ...requestState,
       text: $activeTabConfigStore.selectedRpc!.mockRequestPayloadString
     });
   });
+
+  function metaDataButtonClicked() {
+    if (metadataContent.style?.maxHeight != "0px") {
+      metadataContent.style.maxHeight = "0px";
+    } else {
+      metadataContent.style.maxHeight = metadataContent.scrollHeight + "px";
+    }
+  }
+
 </script>
 
 <div class="page">
@@ -48,21 +59,23 @@
       <SendRequestButton />
     </div>
   </div>
-</div>
 
-<div>
-  <h5>Metadata</h5>
-  <GenericEditor
-    text={requestState.metadata}
-    height="300"
-    width="50%"
-    on:textChange={e => {
-      activeTabConfigStore.setClientRequestEditorState({
-        ...requestState,
-        metadata: e.detail
-      });
-    }}
-  />
+  <button class="primary-color white-text" on:click={metaDataButtonClicked}>
+    Metadata
+  </button>
+
+  <div bind:this={metadataContent} class="meta-data-content">
+    <GenericEditor
+      text={requestState.metadata}
+      height="300"
+      on:textChange={e => {
+        activeTabConfigStore.setClientRequestEditorState({
+          ...requestState,
+          metadata: e.detail
+        });
+      }}
+    />
+  </div>
 </div>
 
 <style>
@@ -83,4 +96,22 @@
     display: flex;
     flex-flow: column;
   }
+
+  .meta-data-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+    background-color: #f1f1f1;
+
+    cursor: pointer;
+    color: #fff;
+    padding: 8px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 15px;
+    font-weight: bold;
+  }
+
 </style>
