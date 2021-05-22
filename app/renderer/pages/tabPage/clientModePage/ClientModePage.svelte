@@ -60,9 +60,9 @@
     </div>
   </div>
 
-  <button class="primary-color white-text" on:click={metaDataButtonClicked}
-    >Metadata</button
-  >
+  <button class="primary-color white-text" on:click={metaDataButtonClicked}>
+    Metadata
+  </button>
 
   <div bind:this={metadataContent} class="meta-data-content">
     <GenericEditor
