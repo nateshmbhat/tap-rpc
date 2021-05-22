@@ -8,6 +8,8 @@
 
   $: requestState = $activeTabConfigStore.clientRequestEditorState;
   $: responseState = $activeTabConfigStore.clientResponseEditorState;
+
+  let metadataContent: HTMLElement;
   onMount(() => {
     activeTabConfigStore.setClientRequestEditorState({
       ...requestState,
@@ -16,13 +18,10 @@
   });
 
   function metaDataButtonClicked() {
-    var content = document.getElementById("meta-data-content");
-
-    if (content == null) return;
-    if (content.style.maxHeight != null && content.style.maxHeight != "0px") {
-      content.style.maxHeight = "0px";
+    if (metadataContent.style?.maxHeight != "0px") {
+      metadataContent.style.maxHeight = "0px";
     } else {
-      content.style.maxHeight = content.scrollHeight + "px";
+      metadataContent.style.maxHeight = metadataContent.scrollHeight + "px";
     }
   }
 
@@ -61,13 +60,11 @@
     </div>
   </div>
 
-  <button
-    class="primary-color"
-    id="meta-data-button"
-    on:click={metaDataButtonClicked}>Metadata</button
+  <button class="primary-color white-text" on:click={metaDataButtonClicked}
+    >Metadata</button
   >
 
-  <div class="meta-data-Content" id="meta-data-content">
+  <div bind:this={metadataContent} class="meta-data-content">
     <GenericEditor
       text={requestState.metadata}
       height="300"
@@ -100,14 +97,12 @@
     flex-flow: column;
   }
 
-  .meta-data-Content {
+  .meta-data-content {
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.2s ease-out;
     background-color: #f1f1f1;
-  }
 
-  #meta-data-button {
     cursor: pointer;
     color: #fff;
     padding: 8px;

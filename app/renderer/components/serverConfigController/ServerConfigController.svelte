@@ -14,11 +14,12 @@
       );
     }
   }
+
 </script>
 
 <div class="row">
   <div>
-    <label for="target-server">Target Server :</label>
+    <label for="target-server">Target Server</label>
     <input
       on:input={e =>
         activeTabConfigStore.setTargetGrpcServerUrl(e.currentTarget.value)}
@@ -30,7 +31,7 @@
 
   <div>
     <Checkbox checked={tlsCert != undefined} on:change={onUseTlsCheckboxChanged}
-      >TLS</Checkbox
+      >Use TLS</Checkbox
     >
   </div>
 </div>
