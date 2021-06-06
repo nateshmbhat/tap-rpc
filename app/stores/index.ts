@@ -3,5 +3,5 @@ export type { AppConfigModel, RequestResponseEditorModel } from "./appConfigStor
 export { RpcOperationMode as RpcOperationMode} from "./appConfigStore";
 
 export { protoFilesStore , protoImportPathsStore } from "./protoFiles";
-export { activeTabConfigStore , EditorDataFlowMode} from "./tabStore";
+export { activeTabConfigStore } from "./tabStore";
 export { rpcProtoInfosStore, servicesStore } from "./protoInfo";

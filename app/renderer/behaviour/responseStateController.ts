@@ -1,9 +1,6 @@
 import { EventEmitter } from "events";
+import { EditorEventType } from "../components/types/types";
 
-export const EditorEventType = {
-    loadedMessageToEditor: "loadedMessageToEditor",
-    editingDone: "editingDone",
-};
 
 export class EditorEventEmitter extends EventEmitter {
     isMessageLoaded: boolean = false;

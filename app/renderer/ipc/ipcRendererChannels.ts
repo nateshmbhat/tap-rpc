@@ -3,11 +3,11 @@ import type { IpcRendererEvent } from "electron/main";
 import { requestInterceptor, responseInterceptor } from "../behaviour";
 import { IpcChannel, IpcRendererChannelInterface, IpcRequest } from "../../commons/ipc/ipcChannelInterface";
 import { ProtoUtil } from "../../commons/utils";
-import { FakerUtil, TabUtil } from "../../commons/utils/util";
-import { activeTabConfigStore, appConfigStore, RpcOperationMode, rpcProtoInfosStore } from "../../stores";
+import { TabUtil } from "../../commons/utils/util";
+import { activeTabConfigStore, RpcOperationMode} from "../../stores";
 import { GrpcClientManager } from "../behaviour/grpcClientManager";
-import type { RpcProtoInfo } from "../behaviour/models";
 import { get } from "svelte/store";
+import type { IncomingRequest } from "../components/types/types";
 
 export class RequestHandlerChannel implements IpcRendererChannelInterface {
     getName(): string {
@@ -25,10 +25,12 @@ export class RequestHandlerChannel implements IpcRendererChannelInterface {
         metadata.internalRepr.forEach((value, key) => {
             metadataObject.add(key, value[0])
         })
+
         const rpcProtoInfo = await ProtoUtil.getMethodRpc(serviceName, methodName)
         const activeTabConfig = get(activeTabConfigStore)
 
         const rpcTab = await TabUtil.getTabConfigFromRpc(rpcProtoInfo)
+
         if (rpcTab == undefined || activeTabConfig.id != rpcTab.id) {
             GrpcClientManager.sendRequest({
                 requestMessage: ProtoUtil.stringify(requestObject),
@@ -49,7 +51,7 @@ export class RequestHandlerChannel implements IpcRendererChannelInterface {
                 this.handleRequestInClientMode(request, metadataObject, event);
             }
             else if (activeTabConfig.rpcOperationMode == RpcOperationMode.mockRpc) {
-                this.hanldeRequestInMockRpcMode(request, metadataObject, event);
+                this.handleRequestInMockRpcMode(request, metadataObject, event);
             }
         }
     }
@@ -59,8 +61,7 @@ export class RequestHandlerChannel implements IpcRendererChannelInterface {
     }
 
     private async handleRequestInMonitorMode(request: IpcRequest, metadata: Metadata, event: IpcRendererEvent) {
-        const { serviceName, methodName, requestObject }:
-            { serviceName: string, methodName: string, requestObject: any } = request.params
+        const { serviceName, methodName, requestObject }: IncomingRequest = request.params
         const rpcProtoInfo = await ProtoUtil.getMethodRpc(serviceName, methodName)
 
         requestInterceptor({
@@ -75,7 +76,7 @@ export class RequestHandlerChannel implements IpcRendererChannelInterface {
             });
     }
 
-    private async hanldeRequestInMockRpcMode(request: IpcRequest, metadata: Metadata, event: IpcRendererEvent) {
+    private async handleRequestInMockRpcMode(request: IpcRequest, metadata: Metadata, event: IpcRendererEvent) {
         const mockResponse = get(activeTabConfigStore).mockRpcEditorText
         event.sender.send(request.responseChannel!, { data: JSON.parse(mockResponse) })
     }

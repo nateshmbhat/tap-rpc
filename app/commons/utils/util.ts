@@ -3,8 +3,9 @@ import type { OpenDialogReturnValue } from "electron/main";
 import { loadProtos, RpcProtoInfo } from "../../renderer/behaviour";
 import { appConfigStore, protoFilesStore, servicesStore } from "../../stores";
 import faker from 'faker';
-import { TabConfigModel, tabListConfigStore } from "../../stores/tabStore";
+import { tabListConfigStore } from "../../stores/tabStore";
 import { get } from "svelte/store";
+import type { TabConfigModel } from "../../renderer/components/types/types";
 
 export class ProtoUtil {
     static async getMethodRpc(serviceName: string, methodName: string): Promise<RpcProtoInfo> {
