@@ -1,10 +1,11 @@
 import type { Metadata } from '@grpc/grpc-js'
 import { get } from 'svelte/store';
 import { ProtoUtil } from '../../commons/utils';
-import { activeTabConfigStore} from '../../stores';
-import { EditorDataFlowMode, EditorEventType } from '../components/types/types';
+import { activeTabConfigStore } from '../../stores';
+import { EditorDataFlowMode, } from '../components/types/types';
 import { GrpcClientManager } from './grpcClientManager';
 import type { RpcProtoInfo, ResponseInfo } from './models';
+import { EditorEventType } from './responseStateController';
 
 interface RequestInterceptorInput {
     metadata: Metadata,
@@ -17,6 +18,16 @@ export function requestInterceptor(incomingRequest: RequestInterceptorInput): Pr
         const config = get(activeTabConfigStore)
 
         console.log('Incoming request : ', incomingRequest)
+
+        activeTabConfigStore.setMonitorRequestEditorState({
+            ...config.monitorRequestEditorState,
+            incomingRequest: {
+                ...config.monitorRequestEditorState.incomingRequest!,
+                text: ProtoUtil.stringify(incomingRequest.requestMessage),
+                metadata: ProtoUtil.stringify(incomingRequest.metadata.getMap()),
+            }
+        })
+
         const transformedRequest = await requestTransformer(incomingRequest)
         console.log('transformedRequest : ', transformedRequest)
         GrpcClientManager.sendRequest({

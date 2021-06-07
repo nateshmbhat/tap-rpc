@@ -54,11 +54,6 @@ export interface RpcSelectorFileType {
     files: RpcSelectorFileType[]
 }
 
-export const enum EditorEventType {
-    loadedMessageToEditor = "loadedMessageToEditor",
-    editingDone = "editingDone",
-};
-
 export interface IncomingRequest {
     serviceName: string,
     methodName: string,
