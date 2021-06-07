@@ -3,8 +3,9 @@ import type { OpenDialogReturnValue } from "electron/main";
 import { loadProtos, RpcProtoInfo } from "../../renderer/behaviour";
 import { appConfigStore, protoFilesStore, servicesStore } from "../../stores";
 import faker from 'faker';
-import { TabConfigModel, tabListConfigStore } from "../../stores/tabStore";
+import { tabListConfigStore } from "../../stores/tabStore";
 import { get } from "svelte/store";
+import type { IncomingRequest, TabConfigModel } from "../../renderer/components/types/types";
 
 export class ProtoUtil {
     static async getMethodRpc(serviceName: string, methodName: string): Promise<RpcProtoInfo> {
@@ -23,9 +24,14 @@ export class ProtoUtil {
             }
         })
     }
+
+    static async getMethodRpcFromRequest(incomingRequest: IncomingRequest): Promise<RpcProtoInfo> {
+        return this.getMethodRpc(incomingRequest.serviceName, incomingRequest.methodName)
+    }
+
     static async loadProtoFilesAndStartServer(filePaths: string[], importPaths: string[]) {
         const protoFiles = get(protoFilesStore).map(pf => pf.proto.filePath)
-        filePaths = filePaths.filter((fp) => protoFiles.indexOf(fp)<0)
+        filePaths = filePaths.filter((fp) => protoFiles.indexOf(fp) < 0)
         if (filePaths.length == 0) return
         const uniqueProtoFilePaths = [...new Set([...filePaths, ...protoFiles])];
         const loadedProtoFiles = await loadProtos(uniqueProtoFilePaths, importPaths);

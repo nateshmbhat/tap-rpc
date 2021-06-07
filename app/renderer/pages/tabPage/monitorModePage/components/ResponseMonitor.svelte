@@ -1,0 +1,49 @@
+<script lang="ts">
+  import { activeTabConfigStore } from "../../../../../stores";
+  import LiveEditCheckBox from "../components/LiveEditCheckBox.svelte";
+  import GenericEditor from "../../../../components/editors/GenericEditor.svelte";
+  import { EditorDataFlowMode } from "../../../../components/types/types";
+
+  const changeResponseMode = async (enableDataEdit: boolean) => {
+    activeTabConfigStore.setMonitorResponseEditorState({
+      ...$activeTabConfigStore.monitorResponseEditorState,
+      dataFlowMode: enableDataEdit
+        ? EditorDataFlowMode.liveEdit
+        : EditorDataFlowMode.passThrough
+    });
+  };
+
+  const responseEditDone = async () => {
+    $activeTabConfigStore.monitorResponseEditorState.eventEmitter.emitEditingDone();
+  };
+
+  $: responseState = $activeTabConfigStore.monitorResponseEditorState;
+  $: responseLiveEditEnabled =
+    responseState.dataFlowMode == EditorDataFlowMode.liveEdit;
+
+  let incomingResponseText: string | undefined;
+  $: incomingResponseText = responseState.incomingResponseText;
+
+  function onResponseEditorChanged(newText: string) {
+    activeTabConfigStore.setMonitorResponseEditorState({
+      ...responseState,
+      incomingResponseText: newText
+    });
+  }
+
+</script>
+
+{#if incomingResponseText !== undefined}
+  <LiveEditCheckBox
+    checked={responseLiveEditEnabled}
+    checkBoxLabel="Change Response"
+    on:change={e => changeResponseMode(e.detail)}
+    on:proceed={responseEditDone}
+  />
+  <GenericEditor
+    text={incomingResponseText}
+    on:textChange={e => onResponseEditorChanged(e.detail)}
+  />
+{:else}
+  <div class="center waiting-for-response">Waiting for Response...</div>
+{/if}

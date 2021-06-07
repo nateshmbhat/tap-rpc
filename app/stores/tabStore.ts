@@ -1,47 +1,10 @@
-import { derived, get, writable } from "svelte/store";
+import { derived, writable } from "svelte/store";
 import type { Certificate, RpcProtoInfo } from "../renderer/behaviour";
 import { RpcOperationMode } from "./appConfigStore";
 import { EditorEventEmitter } from "../renderer/behaviour/responseStateController";
+import { ClientEditorModel, EditorDataFlowMode, MonitorRequestEditorModel, MonitorResponseEditorModel, TabConfigModel, TabListConfigModel, } from "../renderer/components/types/types";
+import immer from "immer";
 
-export interface TabConfigModel {
-    id: string;
-    selectedRpc: RpcProtoInfo | undefined;
-    targetGrpcServerUrl: string;
-    rpcOperationMode: RpcOperationMode;
-    monitorRequestEditorState: MonitorRequestEditorModel;
-    monitorResponseEditorState: MonitorResponseEditorModel;
-    tlsCertificate?: Certificate,
-    clientRequestEditorState: ClientEditorModel;
-    clientResponseEditorState: ClientEditorModel;
-    mockRpcEditorText: string;
-}
-
-export interface ClientEditorModel {
-    text: string;
-    metadata: string;
-}
-export interface TabListConfigModel {
-    tabs: TabConfigModel[];
-    activeTabIndex: number;
-}
-
-///Enum only applicable for editor when it "not in client mode"
-export enum EditorDataFlowMode {
-    passThrough, liveEdit
-}
-
-export interface MonitorRequestEditorModel {
-    text: string;
-    metadata: string;
-    eventEmitter: EditorEventEmitter;
-    dataFlowMode: EditorDataFlowMode;
-}
-
-export interface MonitorResponseEditorModel {
-    text: string;
-    eventEmitter: EditorEventEmitter;
-    dataFlowMode: EditorDataFlowMode;
-}
 
 function getDefaultTabConfig(): TabConfigModel {
     return ({
@@ -49,9 +12,17 @@ function getDefaultTabConfig(): TabConfigModel {
         selectedRpc: undefined,
         targetGrpcServerUrl: 'localhost:9090',
         rpcOperationMode: RpcOperationMode.client,
-        monitorRequestEditorState: { text: '', eventEmitter: new EditorEventEmitter(), metadata: '', dataFlowMode: EditorDataFlowMode.passThrough },
+        monitorRequestEditorState: {
+            // incomingRequest: {
+            //     text: '{}',metadata : '{}' , 
+            // },
+            eventEmitter: new EditorEventEmitter(), dataFlowMode: EditorDataFlowMode.passThrough
+        },
         clientRequestEditorState: { text: '{}', metadata: '' },
-        monitorResponseEditorState: { text: '', eventEmitter: new EditorEventEmitter(), dataFlowMode: EditorDataFlowMode.passThrough },
+        monitorResponseEditorState: {
+            // incomingResponse : {},
+            eventEmitter: new EditorEventEmitter(), dataFlowMode: EditorDataFlowMode.passThrough
+        },
         clientResponseEditorState: { text: '', metadata: '' },
         mockRpcEditorText: '{}'
     });
@@ -67,6 +38,16 @@ function createTabListConfigStore() {
         subscribe,
         setActiveTab: (index: number) => update((store) => ({ ...store, activeTabIndex: index })),
         setValue: async (tabConfigListModel: TabListConfigModel) => set(tabConfigListModel),
+        setTabValue: (newTabConfig: TabConfigModel, tabId: string) => update((store) => {
+            return immer(store, (draftStore) => {
+                for (let [index, tabConfig] of draftStore.tabs.entries()) {
+                    if (tabConfig.id === tabId) {
+                        draftStore.tabs[index] = newTabConfig;
+                    }
+                }
+            })
+
+        }),
         setActiveTabSelectedRpc: (rpcInfo: RpcProtoInfo) => update((config) => {
             const activeTab = config.tabs[config.activeTabIndex]
             const allTabs = Array.from(config.tabs)
@@ -85,13 +66,13 @@ function createTabListConfigStore() {
             allTabs[config.activeTabIndex] = { ...activeTab, rpcOperationMode: mode }
             return { ...config, tabs: allTabs }
         }),
-        setActiveTabRequestEditorState: (requestEditorModel: MonitorRequestEditorModel) => update((config) => {
+        setActiveTabMonitorRequestEditorState: (requestEditorModel: MonitorRequestEditorModel) => update((config) => {
             const activeTab = config.tabs[config.activeTabIndex]
             const allTabs = Array.from(config.tabs)
             allTabs[config.activeTabIndex] = { ...activeTab, monitorRequestEditorState: requestEditorModel }
             return { ...config, tabs: allTabs }
         }),
-        setActiveTabResponseEditorState: (responseEditorModel: MonitorResponseEditorModel) => update((config) => {
+        setActiveTabMonitorResponseEditorState: (responseEditorModel: MonitorResponseEditorModel) => update((config) => {
             const activeTab = config.tabs[config.activeTabIndex]
             const allTabs = Array.from(config.tabs)
             allTabs[config.activeTabIndex] = { ...activeTab, monitorResponseEditorState: responseEditorModel }
@@ -121,7 +102,7 @@ function createTabListConfigStore() {
             allTabs.push(newTab)
             return { ...config, tabs: allTabs }
         }),
-        setTlsCertificate: (tlsCertificate: Certificate|undefined) => update((config) => {
+        setTlsCertificate: (tlsCertificate: Certificate | undefined) => update((config) => {
             const allTabs = Array.from(config.tabs)
             const activeTab = config.tabs[config.activeTabIndex]
             allTabs[config.activeTabIndex] = { ...activeTab, tlsCertificate }
@@ -155,9 +136,9 @@ function createActiveTabConfigStore() {
         setRpcOperationMode: async (mode: RpcOperationMode) => {
             tabListConfigStore.setActiveTabRpcOperationMode(mode);
         },
-        setMonitorRequestEditorState: (editorModel: MonitorRequestEditorModel) => tabListConfigStore.setActiveTabRequestEditorState(editorModel),
-        setTlsCertificate: (tlsCertificate: Certificate|undefined) => tabListConfigStore.setTlsCertificate(tlsCertificate),
-        setMonitorResponseEditorState: (editorModel: MonitorResponseEditorModel) => tabListConfigStore.setActiveTabResponseEditorState(editorModel),
+        setMonitorRequestEditorState: (editorModel: MonitorRequestEditorModel) => tabListConfigStore.setActiveTabMonitorRequestEditorState(editorModel),
+        setTlsCertificate: (tlsCertificate: Certificate | undefined) => tabListConfigStore.setTlsCertificate(tlsCertificate),
+        setMonitorResponseEditorState: (editorModel: MonitorResponseEditorModel) => tabListConfigStore.setActiveTabMonitorResponseEditorState(editorModel),
         setClientRequestEditorState: (editorModel: ClientEditorModel) => tabListConfigStore.setActiveTabClientRequestEditorState(editorModel),
         setClientResponseEditorState: (editorModel: ClientEditorModel) => tabListConfigStore.setActiveTabClientResponseEditorState(editorModel),
         setMockRpcEditorText: (text: string) => tabListConfigStore.setActiveTabMockRpcEditorText(text),

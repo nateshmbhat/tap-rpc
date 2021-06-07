@@ -1,45 +1,8 @@
 <script lang="ts">
-  import { activeTabConfigStore, EditorDataFlowMode } from "../../../../stores";
   import ServerConfigController from "../../../components/serverConfigController/ServerConfigController.svelte";
   import { Row, Col } from "svelte-materialify/src";
-  import LiveEditCheckBox from "./components/LiveEditCheckBox.svelte";
-  import GenericEditor from "../../../components/editors/GenericEditor.svelte";
-
-  const changeRequestMode = async (enableDataEdit: boolean) => {
-    activeTabConfigStore.setMonitorRequestEditorState({
-      ...$activeTabConfigStore.monitorRequestEditorState,
-      dataFlowMode: enableDataEdit
-        ? EditorDataFlowMode.liveEdit
-        : EditorDataFlowMode.passThrough
-    });
-  };
-  const changeResponseMode = async (enableDataEdit: boolean) => {
-    activeTabConfigStore.setMonitorResponseEditorState({
-      ...$activeTabConfigStore.monitorResponseEditorState,
-      dataFlowMode: enableDataEdit
-        ? EditorDataFlowMode.liveEdit
-        : EditorDataFlowMode.passThrough
-    });
-  };
-
-  const requestEditDone = async () => {
-    $activeTabConfigStore.monitorRequestEditorState.eventEmitter.emitEditingDone();
-  };
-
-  const responseEditDone = async () => {
-    $activeTabConfigStore.monitorResponseEditorState.eventEmitter.emitEditingDone();
-  };
-
-  $: requestLiveEditEnabled =
-    $activeTabConfigStore.monitorRequestEditorState.dataFlowMode ==
-    EditorDataFlowMode.liveEdit;
-
-  $: responseLiveEditEnabled =
-    $activeTabConfigStore.monitorResponseEditorState.dataFlowMode ==
-    EditorDataFlowMode.liveEdit;
-
-  $: requestState = $activeTabConfigStore.monitorRequestEditorState;
-  $: responseState = $activeTabConfigStore.monitorResponseEditorState;
+  import RequestMonitor from "./components/RequestMonitor.svelte";
+  import ResponseMonitor from "./components/ResponseMonitor.svelte";
 
 </script>
 
@@ -47,39 +10,10 @@
   <ServerConfigController />
   <Row>
     <Col>
-      <LiveEditCheckBox
-        checked={requestLiveEditEnabled}
-        checkBoxLabel="Change Request"
-        on:change={e => changeRequestMode(e.detail)}
-        on:proceed={requestEditDone}
-      />
-      <GenericEditor
-        text={requestState.text}
-        on:textChange={e => {
-          activeTabConfigStore.setMonitorRequestEditorState({
-            ...requestState,
-            text: e.detail
-          });
-        }}
-      />
+      <RequestMonitor />
     </Col>
     <Col>
-      <LiveEditCheckBox
-        checked={responseLiveEditEnabled}
-        checkBoxLabel="Change Response"
-        on:change={e => changeResponseMode(e.detail)}
-        on:proceed={responseEditDone}
-      />
-
-      <GenericEditor
-        text={responseState.text}
-        on:textChange={e => {
-          activeTabConfigStore.setMonitorResponseEditorState({
-            ...responseState,
-            text: e.detail
-          });
-        }}
-      />
+      <ResponseMonitor />
     </Col>
   </Row>
 </div>
