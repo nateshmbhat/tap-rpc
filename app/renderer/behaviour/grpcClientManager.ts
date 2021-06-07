@@ -22,7 +22,7 @@ class GrpcClientManager {
         });
 
         grpcRequest.on(GRPCEventType.ERROR, (e: Error, metaInfo: ResponseMetaInformation) => {
-            console.error('GRPC ERROR EVENT : ', e, metaInfo);
+            console.warn('GRPC ERROR EVENT : ', e, metaInfo);
             if (onError) onError(e, metaInfo)
         });
 
@@ -30,12 +30,14 @@ class GrpcClientManager {
             if (metaInfo.stream) {
                 //TODO : handle streaming call
             } else {
+                console.info('GRPC Response DATA Event : ')
+                console.info({ data, metaInfo }, { depth: null })
                 if (onResponse) onResponse(data, metaInfo)
             }
         });
 
         grpcRequest.on(GRPCEventType.END, () => {
-            console.warn('GRPC End Event');
+            console.info('GRPC End Event');
             if (onCallEnd) onCallEnd()
         });
 

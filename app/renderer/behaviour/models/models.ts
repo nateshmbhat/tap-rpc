@@ -22,8 +22,15 @@ export interface ProtoService {
   methods: { [key: string]: RpcProtoInfo }
 }
 
+export interface ResponseError {
+  code: number;
+  details: string;
+  message: string;
+}
+
 export interface ResponseInfo {
   isStreaming: boolean;
   data: Object;
   metaInfo: ResponseMetaInformation;
+  error?: ResponseError
 }

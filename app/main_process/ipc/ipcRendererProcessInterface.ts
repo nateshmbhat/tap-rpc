@@ -1,13 +1,11 @@
 import { IpcChannel } from "../../commons/ipc/ipcChannelInterface"
+import type { ResponseInfo } from "../../renderer/behaviour";
+import type { IncomingResponse } from "../../renderer/components/types/types";
 import { IpcRendererService } from "./ipcRendererService"
 
-interface TransformedResponse {
-    message: Object
-}
-
 export class RendererProcessInterface {
-    static async onRequest(requestObject: any, metadata: any, serviceName: string, methodName: string): Promise<TransformedResponse> {
-        const ipcResponse = await IpcRendererService.send<{ data: Object }>(IpcChannel.onRequest, {
+    static async onRequest(requestObject: any, metadata: any, serviceName: string, methodName: string): Promise<ResponseInfo> {
+        const ipcResponse = await IpcRendererService.send<ResponseInfo>(IpcChannel.onRequest, {
             params: {
                 requestObject,
                 metadata,
@@ -15,6 +13,6 @@ export class RendererProcessInterface {
                 methodName
             }
         })
-        return { message: ipcResponse.data };
+        return ipcResponse
     }
 }

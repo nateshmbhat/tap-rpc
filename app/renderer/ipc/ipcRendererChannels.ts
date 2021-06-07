@@ -1,10 +1,10 @@
 import { Metadata, MetadataValue } from "@grpc/grpc-js";
 import type { IpcRendererEvent } from "electron/main";
-import { requestInterceptor, responseInterceptor } from "../behaviour";
+import { requestInterceptor, ResponseInfo, responseInterceptor } from "../behaviour";
 import { IpcChannel, IpcRendererChannelInterface, IpcRequest } from "../../commons/ipc/ipcChannelInterface";
 import { ProtoUtil } from "../../commons/utils";
 import { TabUtil } from "../../commons/utils/util";
-import { activeTabConfigStore, RpcOperationMode} from "../../stores";
+import { activeTabConfigStore, RpcOperationMode } from "../../stores";
 import { GrpcClientManager } from "../behaviour/grpcClientManager";
 import { get } from "svelte/store";
 import type { IncomingRequest } from "../components/types/types";
@@ -69,10 +69,13 @@ export class RequestHandlerChannel implements IpcRendererChannelInterface {
             metadata,
             rpcProtoInfo
         })
-            .then(responseInfo =>
-                responseInterceptor({ responseMessage: responseInfo })
-            ).then(transformedResponse => {
+            .then(responseInterceptor)
+            .then(transformedResponse => {
                 event.sender.send(request.responseChannel!, transformedResponse);
+            })
+            .catch(error => {
+                console.table(error)
+                event.sender.send(request.responseChannel!, { error: { code: error.code, details: error.details, message: error.message }, data: {}, isStreaming: false, metaInfo: {} } as ResponseInfo);
             });
     }
 

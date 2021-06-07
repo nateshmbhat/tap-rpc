@@ -1,6 +1,6 @@
 import * as grpc from '@grpc/grpc-js'
 import { AppConfigModel, appConfigStore } from '../stores';
-import type { ProtoService } from '../renderer/behaviour';
+import type { ProtoService, ResponseError } from '../renderer/behaviour';
 import { responseInterceptor } from '../renderer/behaviour';
 import { ipcRenderer } from 'electron';
 import { RendererProcessInterface } from './ipc/ipcRendererProcessInterface';
@@ -20,7 +20,14 @@ function addGrpcServices(server: grpc.Server | null, serviceProtos: ProtoService
           serviceProto.serviceName, methodRpcInfo.methodName).then((response) => {
             console.log('reponse from renderer process : ')
             console.dir(response, { depth: null })
-            callback(null, response.message)
+            if (response.error === undefined) {
+              callback(null, response.data)
+            }
+            else {
+              const error = response.error
+              console.table(error)
+              callback(error)
+            }
           })
       };
     })
