@@ -13,11 +13,11 @@
   } from 'svelte-materialify/src'
   import {
     activeTabConfigStore,
-    TabConfigModel,
     tabListConfigStore,
   } from '../../stores/tabStore'
   import { tick } from 'svelte'
   import TabCloseButton from '../pages/tabPage/components/TabCloseButton.svelte'
+  import type { TabConfigModel } from './types/types';
 
   $: tabs = $tabListConfigStore.tabs
 
@@ -42,28 +42,28 @@
   $: activeTabIndex = $tabListConfigStore.activeTabIndex
 </script>
 
-<style>
-  .new-tab-button {
-    transform: translate(10px, 10px); 
-  }
-</style>
-
 <Tabs
   centerActive
   slider={false}
   class="primary-text"
   value={activeTabIndex}
-  on:change={onTabChange}>
+  on:change={onTabChange}
+>
   <div slot="tabs">
     {#each tabs as tab, i (i)}
-        <Tab value={i}>
-          <div style="position:relative;text-transform: capitalize;{activeTabIndex===i ? 'font-weight:bold;' : '' }">
-            {#if tab.selectedRpc}{tab.selectedRpc.methodName}{:else}{'RPC'}{/if}
-            <span>
-              <TabCloseButton on:click={(e) => closeTab(i, tab)} />
-            </span>
-          </div>
-        </Tab>
+      <Tab value={i}>
+        <div
+          style="position:relative;text-transform: capitalize;{activeTabIndex ===
+          i
+            ? 'font-weight:bold;'
+            : ''}"
+        >
+          {#if tab.selectedRpc}{tab.selectedRpc.methodName}{:else}{"RPC"}{/if}
+          <span>
+            <TabCloseButton on:click={e => closeTab(i, tab)} />
+          </span>
+        </div>
+      </Tab>
     {/each}
     <span class="new-tab-button">
       <Button fab size="x-small" on:click={onNewTabClick}>
@@ -74,3 +74,10 @@
 
   <TapRpcTab />
 </Tabs>
+
+<style>
+  .new-tab-button {
+    transform: translate(10px, 10px);
+  }
+
+</style>
