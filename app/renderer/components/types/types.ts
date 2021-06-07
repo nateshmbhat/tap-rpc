@@ -30,10 +30,6 @@ export enum EditorDataFlowMode {
 }
 
 
-export interface IncomingResponse {
-    text: string;
-}
-
 export interface MonitorRequestEditorModel {
     incomingRequest?: IncomingRequest
     eventEmitter: EditorEventEmitter;
@@ -41,7 +37,7 @@ export interface MonitorRequestEditorModel {
 }
 
 export interface MonitorResponseEditorModel {
-    incomingResponse?: IncomingResponse;
+    incomingResponseText?: string;
     eventEmitter: EditorEventEmitter;
     dataFlowMode: EditorDataFlowMode;
 }

@@ -1,6 +1,5 @@
 import { IpcChannel } from "../../commons/ipc/ipcChannelInterface"
 import type { ResponseInfo } from "../../renderer/behaviour";
-import type { IncomingResponse } from "../../renderer/components/types/types";
 import { IpcRendererService } from "./ipcRendererService"
 
 export class RendererProcessInterface {
