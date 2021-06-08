@@ -3,7 +3,7 @@
   import { activeTabConfigStore, protoFilesStore } from '../../../stores'
   import Folder from './components/Folder.svelte'
   import type { RpcSelectorFileType } from '../types/types'
-  import { Card } from 'svelte-materialify';
+  import { Card } from 'svelte-materialify/src';
 
   $: protoFiles = $protoFilesStore
 
