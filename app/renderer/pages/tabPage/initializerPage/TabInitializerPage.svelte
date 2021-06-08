@@ -16,10 +16,5 @@ import type { ProtoFile } from "../../../behaviour";
   <div class="ma-2" />
   <Divider />
   <ProtoImporter />
-
-  <div class='ma-2'>
-    {#if $protoFilesStore.length > 0}
-      <RpcSelector />
-    {/if}
-  </div>
+  <RpcSelector />
 </Container>
