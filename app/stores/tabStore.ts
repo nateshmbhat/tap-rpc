@@ -11,7 +11,7 @@ function getDefaultTabConfig(): TabConfigModel {
         id: '0',
         selectedRpc: undefined,
         targetGrpcServerUrl: 'localhost:9090',
-        rpcOperationMode: RpcOperationMode.client,
+        rpcOperationMode: RpcOperationMode.monitor,
         monitorRequestEditorState: {
             // incomingRequest: {
             //     text: '{}',metadata : '{}' , 
@@ -98,7 +98,9 @@ function createTabListConfigStore() {
         }),
         addNewTab: () => update((config) => {
             const allTabs = Array.from(config.tabs)
-            const newTab = { ...getDefaultTabConfig(), id: allTabs.length.toString() }
+            const newTabConfig = getDefaultTabConfig()
+            newTabConfig.targetGrpcServerUrl = allTabs[0].targetGrpcServerUrl
+            const newTab = { ...newTabConfig, id: allTabs.length.toString() }
             allTabs.push(newTab)
             return { ...config, tabs: allTabs }
         }),
