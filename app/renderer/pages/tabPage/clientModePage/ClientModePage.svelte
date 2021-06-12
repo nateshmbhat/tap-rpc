@@ -5,11 +5,11 @@
   import GenericEditor from "../../../components/editors/GenericEditor.svelte";
   import { activeTabConfigStore } from "../../../../stores";
   import { onMount } from "svelte";
+  import ClientMetadataEditor from "./components/ClientMetadataEditor.svelte";
 
   $: requestState = $activeTabConfigStore.clientRequestEditorState;
   $: responseState = $activeTabConfigStore.clientResponseEditorState;
 
-  let metadataContent: HTMLElement;
   onMount(() => {
     activeTabConfigStore.setClientRequestEditorState({
       ...requestState,
@@ -17,21 +17,13 @@
     });
   });
 
-  function metaDataButtonClicked() {
-    if (metadataContent.style?.maxHeight != "0px") {
-      metadataContent.style.maxHeight = "0px";
-    } else {
-      metadataContent.style.maxHeight = metadataContent.scrollHeight + "px";
-    }
-  }
-
 </script>
 
 <div class="page">
   <ServerConfigController />
   <div class="client-container">
     <Row style="height:100%;">
-      <Col>
+      <Col class="pb-0 pt-0">
         <GenericEditor
           text={requestState.text}
           on:textChange={e => {
@@ -43,7 +35,7 @@
         />
       </Col>
 
-      <Col>
+      <Col class="pb-0 pt-0">
         <GenericEditor
           text={responseState.text}
           on:textChange={e => {
@@ -60,22 +52,7 @@
     </div>
   </div>
 
-  <button class="primary-color white-text" on:click={metaDataButtonClicked}>
-    Metadata
-  </button>
-
-  <div bind:this={metadataContent} class="meta-data-content">
-    <GenericEditor
-      text={requestState.metadata}
-      height="300"
-      on:textChange={e => {
-        activeTabConfigStore.setClientRequestEditorState({
-          ...requestState,
-          metadata: e.detail
-        });
-      }}
-    />
-  </div>
+  <ClientMetadataEditor />
 </div>
 
 <style>
@@ -95,23 +72,6 @@
     height: calc(100vh - 52px);
     display: flex;
     flex-flow: column;
-  }
-
-  .meta-data-content {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.2s ease-out;
-    background-color: #f1f1f1;
-
-    cursor: pointer;
-    color: #fff;
-    padding: 8px;
-    width: 100%;
-    border: none;
-    text-align: left;
-    outline: none;
-    font-size: 15px;
-    font-weight: bold;
   }
 
 </style>

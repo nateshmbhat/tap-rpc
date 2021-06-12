@@ -3,6 +3,7 @@
   import { Row, Col, Button } from "svelte-materialify/src";
   import RequestMonitor from "./components/RequestMonitor.svelte";
   import ResponseMonitor from "./components/ResponseMonitor.svelte";
+  import MetadataMonitor from "./components/MetadataMonitor.svelte";
 
 </script>
 
@@ -16,6 +17,7 @@
       <ResponseMonitor />
     </Col>
   </Row>
+  <MetadataMonitor />
 </div>
 
 <style>
