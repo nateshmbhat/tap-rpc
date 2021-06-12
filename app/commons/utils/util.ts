@@ -6,6 +6,7 @@ import faker from 'faker';
 import { tabListConfigStore } from "../../stores/tabStore";
 import { get } from "svelte/store";
 import type { IncomingRequest, TabConfigModel } from "../../renderer/components/types/types";
+import { Metadata } from "@grpc/grpc-js";
 
 export class ProtoUtil {
     static async getMethodRpc(serviceName: string, methodName: string): Promise<RpcProtoInfo> {
@@ -40,6 +41,17 @@ export class ProtoUtil {
 
     static stringify(message: any, indentSpace = 2): string {
         return JSON.stringify(message, null, indentSpace)
+    }
+
+    static getMetadataObject(metadataText: string): Metadata {
+        const metadataJson = JSON.parse(metadataText)
+        const metadataObject = new Metadata()
+
+        Object.entries(metadataJson).forEach(([key, value]) => {
+            metadataObject.add(key, value as string)
+        })
+
+        return metadataObject
     }
 }
 

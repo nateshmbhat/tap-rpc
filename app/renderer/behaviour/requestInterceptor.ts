@@ -53,9 +53,11 @@ async function requestTransformer(request: RequestInterceptorInput): Promise<Req
         }
         else if (activeTab.monitorRequestEditorState.dataFlowMode == EditorDataFlowMode.liveEdit) {
             activeTab.monitorRequestEditorState.eventEmitter.on(EditorEventType.editingDone, async () => {
-                const newRequestString = get(activeTabConfigStore).monitorRequestEditorState.incomingRequest?.text ?? '{}';
+                const incomingRequest = get(activeTabConfigStore).monitorRequestEditorState.incomingRequest
+                const newRequestString = incomingRequest?.text ?? '{}';
                 const newRequestObject = JSON.parse(newRequestString)
-                resolve({ metadata: request.metadata, requestMessage: newRequestObject });
+                const metadataObject = ProtoUtil.getMetadataObject(incomingRequest?.metadata ?? '{}')
+                resolve({ metadata: metadataObject, requestMessage: newRequestObject });
             })
         }
     });
