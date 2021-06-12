@@ -5,6 +5,9 @@
   import { ProtoFilesDiskStore } from "./disk_storage/protos";
   import { ProtoUtil } from "./commons/utils";
   import { protoImportPathsStore } from "./stores";
+  import AppSnackBar from "./renderer/components/microComponents/AppSnackBar.svelte";
+import { Snackbar } from "svelte-materialify/src";
+import { snackBarStore } from "./stores/snackBarStore";
 
   onMount(async () => {
     const protoFilePaths = ProtoFilesDiskStore.fetchProtoFiles();
@@ -13,10 +16,12 @@
       $protoImportPathsStore
     );
   });
+
 </script>
 
 <MaterialApp>
   <TapRpc />
+  <AppSnackBar />
 </MaterialApp>
 
 <style global>
@@ -52,4 +57,5 @@
   .border {
     border: 1px solid black;
   }
+
 </style>

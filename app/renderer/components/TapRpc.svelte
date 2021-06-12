@@ -53,10 +53,8 @@
     {#each tabs as tab, i (i)}
       <Tab value={i}>
         <div
-          style="position:relative;text-transform: capitalize;{activeTabIndex ===
-          i
-            ? 'font-weight:bold;'
-            : ''}"
+          style="position:relative;text-transform: capitalize;
+          {activeTabIndex === i ? 'font-weight:bold;' : ''}"
         >
           {#if tab.selectedRpc}{tab.selectedRpc.methodName}{:else}{"RPC"}{/if}
           <span>

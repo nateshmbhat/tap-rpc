@@ -44,6 +44,16 @@ function createProtoImportPathsStore() {
         MainProcessInterface.setProtoImportPaths(protoPaths)
       }
     },
+    removePath: (protoPath: string) => {
+      update(paths => {
+        const newState = paths.filter((path) => path != protoPath)
+        if (ElectronUtil.isInRendererProcess()) {
+          ProtoPathDiskStore.setProtoPaths(newState)
+          MainProcessInterface.setProtoImportPaths(newState)
+        }
+        return newState
+      })
+    },
     addPaths: (newProtoPaths: string[]) => {
       update((paths) => {
         const newState = [...newProtoPaths, ...paths];

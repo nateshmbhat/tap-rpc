@@ -3,6 +3,7 @@
   import { activeTabConfigStore, protoFilesStore } from '../../../stores'
   import Folder from './components/Folder.svelte'
   import type { RpcSelectorFileType } from '../types/types'
+  import { Card } from 'svelte-materialify/src';
 
   $: protoFiles = $protoFilesStore
 
@@ -54,11 +55,15 @@
   }
 </script>
 
-{#if protoFiles.length > 0}
-  <Folder
-    on:fileClick={e => onRpcClick(e.detail)}
-    name="Proto Files"
-    expanded
-    files={protoFilesToRpcSelectorModel(protoFiles)}
-  />
-{/if}
+<Card outlined class="pa-2">
+  {#if protoFiles.length > 0}
+    <Folder
+      on:fileClick={e => onRpcClick(e.detail)}
+      name="Proto Files"
+      expanded
+      files={protoFilesToRpcSelectorModel(protoFiles)}
+    />
+  {:else}
+    <div />
+  {/if}
+</Card>
