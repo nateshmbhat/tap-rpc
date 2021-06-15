@@ -2,7 +2,7 @@ import type { Metadata } from '@grpc/grpc-js'
 import { get } from 'svelte/store';
 import { ProtoUtil } from '../../commons/utils';
 import { activeTabConfigStore } from '../../stores';
-import { EditorDataFlowMode, } from '../components/types/types';
+import { EditorDataFlowMode, MonitorConnectionStatus, } from '../components/types/types';
 import { GrpcClientManager } from './grpcClientManager';
 import type { RpcProtoInfo, ResponseInfo } from './models';
 import { EditorEventType } from './responseStateController';
@@ -21,6 +21,7 @@ export function requestInterceptor(incomingRequest: RequestInterceptorInput): Pr
 
         activeTabConfigStore.setMonitorRequestEditorState({
             ...config.monitorRequestEditorState,
+            connectionStatus: MonitorConnectionStatus.onHold,
             incomingRequest: {
                 ...config.monitorRequestEditorState.incomingRequest!,
                 text: ProtoUtil.stringify(incomingRequest.requestMessage),
@@ -35,6 +36,12 @@ export function requestInterceptor(incomingRequest: RequestInterceptorInput): Pr
             requestMessage: ProtoUtil.stringify(transformedRequest.requestMessage),
             rpcProtoInfo: incomingRequest.rpcProtoInfo,
             url: config.targetGrpcServerUrl,
+            onCallEnd: () => {
+                const tabConfig = get(activeTabConfigStore)
+                activeTabConfigStore.setMonitorRequestEditorState({
+                    ...tabConfig.monitorRequestEditorState, connectionStatus : MonitorConnectionStatus.waiting
+                })
+            },
             onError: (e, metaInfo) => { reject(e) },
             onResponse: (data, metaInfo) => resolve({ data, isStreaming: false, metaInfo })
         })

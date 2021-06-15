@@ -2,7 +2,7 @@
 import { get } from 'svelte/store';
 import { ProtoUtil } from '../../commons/utils';
 import { activeTabConfigStore, appConfigStore, RpcOperationMode } from '../../stores';
-import { EditorDataFlowMode } from '../components/types/types';
+import { EditorDataFlowMode, MonitorConnectionStatus } from '../components/types/types';
 import type { ResponseInfo, RpcProtoInfo } from './models';
 import { EditorEventType } from './responseStateController';
 
@@ -12,6 +12,7 @@ export async function responseInterceptor(responseMessage: ResponseInfo): Promis
 
     activeTabConfigStore.setMonitorResponseEditorState({
         ...activeTabConfig.monitorResponseEditorState,
+        connectionStatus: MonitorConnectionStatus.onHold,
         incomingResponseText: ProtoUtil.stringify(responseMessage.data)
     })
 

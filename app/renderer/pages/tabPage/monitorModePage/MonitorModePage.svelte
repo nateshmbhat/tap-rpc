@@ -1,6 +1,6 @@
 <script lang="ts">
   import ServerConfigController from "../../../components/serverConfigController/ServerConfigController.svelte";
-  import { Row, Col, Button } from "svelte-materialify/src";
+  import { Row, Col } from "svelte-materialify/src";
   import RequestMonitor from "./components/RequestMonitor.svelte";
   import ResponseMonitor from "./components/ResponseMonitor.svelte";
   import MetadataMonitor from "./components/MetadataMonitor.svelte";
