@@ -2,8 +2,8 @@
   import { activeTabConfigStore} from "../../../../../stores";
   import LiveEditCheckBox from "../components/LiveEditCheckBox.svelte";
   import GenericEditor from "../../../../components/editors/GenericEditor.svelte";
-import { EditorDataFlowMode, IncomingRequest } from "../../../../components/types/types";
-
+  import { EditorDataFlowMode, IncomingRequest, MonitorConnectionStatus } from "../../../../components/types/types";
+  import ConnectionStatusIndicator from "./ConnectionStatusIndicator.svelte";
 
   const changeRequestMode = async (enableDataEdit: boolean) => {
     activeTabConfigStore.setMonitorRequestEditorState({
@@ -35,12 +35,20 @@ import { EditorDataFlowMode, IncomingRequest } from "../../../../components/type
 </script>
 
 {#if incomingRequest !== undefined}
-  <LiveEditCheckBox
-    checked={requestLiveEditEnabled}
-    checkBoxLabel="Change Request"
-    on:change={e => changeRequestMode(e.detail)}
-    on:proceed={requestEditDone}
-  />
+  <div class="row align-center">
+    <LiveEditCheckBox
+      checked={requestLiveEditEnabled}
+      checkBoxLabel="Change Request"
+      connectionStatus={requestState.connectionStatus}
+      on:change={e => changeRequestMode(e.detail)}
+      on:proceed={requestEditDone}
+    />
+    <div class="mr-2"></div>
+    <ConnectionStatusIndicator
+      connectionStatus={requestState.connectionStatus}
+    />
+  </div>
+
   <GenericEditor
     text={incomingRequest.text}
     on:textChange={e => onRequestEditorChanged(e.detail)}

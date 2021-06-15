@@ -7,7 +7,7 @@ import { TabUtil } from "../../commons/utils/util";
 import { activeTabConfigStore, RpcOperationMode } from "../../stores";
 import { GrpcClientManager } from "../behaviour/grpcClientManager";
 import { get } from "svelte/store";
-import type { IncomingRequest } from "../components/types/types";
+import { IncomingRequest, MonitorConnectionStatus } from "../components/types/types";
 
 export class RequestHandlerChannel implements IpcRendererChannelInterface {
     getName(): string {
@@ -81,6 +81,12 @@ export class RequestHandlerChannel implements IpcRendererChannelInterface {
                 })
                 console.table(error)
                 event.sender.send(request.responseChannel!, { error: { code: error.code, details: error.details, message: error.message }, data: {}, isStreaming: false, metaInfo: {} } as ResponseInfo);
+            }).finally(() => {
+                const activeConfig = get(activeTabConfigStore)
+                activeTabConfigStore.setMonitorResponseEditorState({
+                    ...activeConfig.monitorResponseEditorState,
+                    connectionStatus: MonitorConnectionStatus.waiting
+                })
             });
     }
 

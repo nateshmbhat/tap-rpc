@@ -2,7 +2,7 @@ import { derived, writable } from "svelte/store";
 import type { Certificate, RpcProtoInfo } from "../renderer/behaviour";
 import { RpcOperationMode } from "./appConfigStore";
 import { EditorEventEmitter } from "../renderer/behaviour/responseStateController";
-import { ClientEditorModel, EditorDataFlowMode, MonitorRequestEditorModel, MonitorResponseEditorModel, TabConfigModel, TabListConfigModel, } from "../renderer/components/types/types";
+import { ClientEditorModel, EditorDataFlowMode, MonitorConnectionStatus, MonitorRequestEditorModel, MonitorResponseEditorModel, TabConfigModel, TabListConfigModel, } from "../renderer/components/types/types";
 import immer from "immer";
 
 
@@ -13,14 +13,12 @@ function getDefaultTabConfig(): TabConfigModel {
         targetGrpcServerUrl: 'localhost:9090',
         rpcOperationMode: RpcOperationMode.monitor,
         monitorRequestEditorState: {
-            // incomingRequest: {
-            //     text: '{}',metadata : '{}' , 
-            // },
+            connectionStatus: MonitorConnectionStatus.waiting,
             eventEmitter: new EditorEventEmitter(), dataFlowMode: EditorDataFlowMode.passThrough
         },
         clientRequestEditorState: { text: '{}', metadata: '' },
         monitorResponseEditorState: {
-            // incomingResponse : {},
+            connectionStatus: MonitorConnectionStatus.waiting,
             eventEmitter: new EditorEventEmitter(), dataFlowMode: EditorDataFlowMode.passThrough
         },
         clientResponseEditorState: { text: '', metadata: '' },

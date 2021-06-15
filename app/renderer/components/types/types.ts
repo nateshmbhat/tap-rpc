@@ -2,6 +2,14 @@ import type { RpcOperationMode } from "../../../stores";
 import type { Certificate, RpcProtoInfo } from "../../behaviour";
 import type { EditorEventEmitter } from "../../behaviour/responseStateController";
 
+export enum MonitorConnectionStatus {
+    //waiting for incoming data
+    waiting,
+
+    //connection alive. Data on hold
+    onHold
+}
+
 export interface TabConfigModel {
     id: string;
     selectedRpc: RpcProtoInfo | undefined;
@@ -34,12 +42,14 @@ export interface MonitorRequestEditorModel {
     incomingRequest?: IncomingRequest
     eventEmitter: EditorEventEmitter;
     dataFlowMode: EditorDataFlowMode;
+    connectionStatus: MonitorConnectionStatus;
 }
 
 export interface MonitorResponseEditorModel {
     incomingResponseText?: string;
     eventEmitter: EditorEventEmitter;
     dataFlowMode: EditorDataFlowMode;
+    connectionStatus: MonitorConnectionStatus;
 }
 
 export interface RpcSelectorFileType {

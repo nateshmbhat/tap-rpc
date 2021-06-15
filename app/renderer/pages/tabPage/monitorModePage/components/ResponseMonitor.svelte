@@ -3,6 +3,7 @@
   import LiveEditCheckBox from "../components/LiveEditCheckBox.svelte";
   import GenericEditor from "../../../../components/editors/GenericEditor.svelte";
   import { EditorDataFlowMode } from "../../../../components/types/types";
+  import ConnectionStatusIndicator from "./ConnectionStatusIndicator.svelte";
 
   const changeResponseMode = async (enableDataEdit: boolean) => {
     activeTabConfigStore.setMonitorResponseEditorState({
@@ -34,12 +35,20 @@
 </script>
 
 {#if incomingResponseText !== undefined}
-  <LiveEditCheckBox
-    checked={responseLiveEditEnabled}
-    checkBoxLabel="Change Response"
-    on:change={e => changeResponseMode(e.detail)}
-    on:proceed={responseEditDone}
-  />
+  <div class="row align-center">
+    <LiveEditCheckBox
+      checked={responseLiveEditEnabled}
+      checkBoxLabel="Change Response"
+      connectionStatus={responseState.connectionStatus}
+      on:change={e => changeResponseMode(e.detail)}
+      on:proceed={responseEditDone}
+    />
+    <div class="mr-2" />
+    <ConnectionStatusIndicator
+      connectionStatus={responseState.connectionStatus}
+    />
+  </div>
+
   <GenericEditor
     text={incomingResponseText}
     on:textChange={e => onResponseEditorChanged(e.detail)}
