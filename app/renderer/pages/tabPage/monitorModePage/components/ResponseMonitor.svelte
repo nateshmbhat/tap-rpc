@@ -35,7 +35,7 @@
 </script>
 
 {#if incomingResponseText !== undefined}
-  <div class="row align-center">
+  <div class="row align-center ml-2 mr-2">
     <LiveEditCheckBox
       checked={responseLiveEditEnabled}
       checkBoxLabel="Change Response"

@@ -6,8 +6,6 @@
   import { ProtoUtil } from "./commons/utils";
   import { protoImportPathsStore } from "./stores";
   import AppSnackBar from "./renderer/components/microComponents/AppSnackBar.svelte";
-import { Snackbar } from "svelte-materialify/src";
-import { snackBarStore } from "./stores/snackBarStore";
 
   onMount(async () => {
     const protoFilePaths = ProtoFilesDiskStore.fetchProtoFiles();
@@ -45,6 +43,7 @@ import { snackBarStore } from "./stores/snackBarStore";
   }
   .row {
     display: flex;
+    flex-wrap: wrap;
     flex-direction: row;
   }
   .col {
@@ -56,6 +55,10 @@ import { snackBarStore } from "./stores/snackBarStore";
   }
   .border {
     border: 1px solid black;
+  }
+
+  .flex-expand {
+    flex: 1 1 auto;
   }
 
 </style>
