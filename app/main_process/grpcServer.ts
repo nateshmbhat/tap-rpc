@@ -1,5 +1,5 @@
 import * as grpc from '@grpc/grpc-js'
-import { AppConfigModel, appConfigStore } from '../stores';
+import { MainProcessAppConfigModel, appConfigStore } from '../stores';
 import type { ProtoService, ResponseError } from '../renderer/behaviour';
 import { responseInterceptor } from '../renderer/behaviour';
 import { ipcRenderer } from 'electron';

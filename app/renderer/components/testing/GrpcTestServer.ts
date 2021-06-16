@@ -1,8 +1,6 @@
 import * as grpc from '@grpc/grpc-js'
-import { AppConfigModel, appConfigStore } from '../../../stores';
+import { appConfigStore } from '../../../stores';
 import type { ProtoService } from '../../behaviour';
-import { responseInterceptor } from '../../behaviour';
-import { ipcRenderer } from 'electron';
 import { get } from 'svelte/store';
 
 function addGrpcServices(server: grpc.Server | null, serviceProtos: ProtoService[]): void {

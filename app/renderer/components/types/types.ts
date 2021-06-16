@@ -1,4 +1,3 @@
-import type { RpcOperationMode } from "../../../stores";
 import type { Certificate, RpcProtoInfo } from "../../behaviour";
 import type { EditorEventEmitter } from "../../behaviour/responseStateController";
 
@@ -30,6 +29,13 @@ export interface ClientEditorModel {
 export interface TabListConfigModel {
     tabs: TabConfigModel[];
     activeTabIndex: number;
+}
+
+
+export enum RpcOperationMode {
+    mockRpc = 'mockRpc',
+    monitor = 'monitor',
+    client = 'client',
 }
 
 ///Enum only applicable for editor when it "not in client mode"

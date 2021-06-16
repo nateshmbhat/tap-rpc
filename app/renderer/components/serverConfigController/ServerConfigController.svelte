@@ -22,7 +22,7 @@
 
 </script>
 
-<Card class="align-self-center mb-1 pa-1 pl-2 pr-2">
+<Card class="mb-1 pa-1 pl-2 pr-2">
   <div class="row">
     <div>
       <TextField
@@ -34,14 +34,8 @@
       >
     </div>
 
-    <Button
-      on:click={onUseTlsCheckboxChanged}
-      outlined
-      rounded
-      class="row pl-2 pr-2 pt-1 ml-2 align-self-center"
+    <Switch class="ml-5" checked={tlsCert != undefined} on:change={onUseTlsCheckboxChanged}>
+      Use TLS</Switch
     >
-      <Switch checked={tlsCert != undefined} />
-      Use TLS
-    </Button>
   </div>
 </Card>

@@ -1,8 +1,7 @@
 import { derived, writable } from "svelte/store";
 import type { Certificate, RpcProtoInfo } from "../renderer/behaviour";
-import { RpcOperationMode } from "./appConfigStore";
 import { EditorEventEmitter } from "../renderer/behaviour/responseStateController";
-import { ClientEditorModel, EditorDataFlowMode, MonitorConnectionStatus, MonitorRequestEditorModel, MonitorResponseEditorModel, TabConfigModel, TabListConfigModel, } from "../renderer/components/types/types";
+import { ClientEditorModel, EditorDataFlowMode, MonitorConnectionStatus, MonitorRequestEditorModel, MonitorResponseEditorModel, RpcOperationMode, TabConfigModel, TabListConfigModel, } from "../renderer/components/types/types";
 import immer from "immer";
 
 

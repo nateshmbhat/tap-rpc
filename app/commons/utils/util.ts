@@ -1,7 +1,7 @@
 import { remote } from "electron";
 import type { OpenDialogReturnValue } from "electron/main";
 import { loadProtos, RpcProtoInfo } from "../../renderer/behaviour";
-import { appConfigStore, protoFilesStore, servicesStore } from "../../stores";
+import { protoFilesStore, servicesStore } from "../../stores";
 import faker from 'faker';
 import { tabListConfigStore } from "../../stores/tabStore";
 import { get } from "svelte/store";
