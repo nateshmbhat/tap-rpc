@@ -21,46 +21,41 @@
 
 <div class="page">
   <ServerConfigController />
-  <div class="client-container">
-    <Row style="height:100%;">
-      <Col class="pb-0 pt-0">
-        <GenericEditor
-          text={requestState.text}
-          on:textChange={e => {
-            activeTabConfigStore.setClientRequestEditorState({
-              ...requestState,
-              text: e.detail
-            });
-          }}
-        />
-      </Col>
-
-      <Col class="pb-0 pt-0">
-        <GenericEditor
-          text={responseState.text}
-          on:textChange={e => {
-            activeTabConfigStore.setClientResponseEditorState({
-              ...responseState,
-              text: e.detail
-            });
-          }}
-        />
-      </Col>
-    </Row>
-    <div class="center sendButton">
-      <SendRequestButton />
+  <div class="row flex-expand">
+    <div class="col flex-expand pb-0 pt-0">
+      <GenericEditor
+        text={requestState.text}
+        on:textChange={e => {
+          activeTabConfigStore.setClientRequestEditorState({
+            ...requestState,
+            text: e.detail
+          });
+        }}
+      />
     </div>
+
+    <div class="col flex-expand pb-0 pt-0">
+      <GenericEditor
+        text={responseState.text}
+        on:textChange={e => {
+          activeTabConfigStore.setClientResponseEditorState({
+            ...responseState,
+            text: e.detail
+          });
+        }}
+      />
+    </div>
+  </div>
+
+  <div class="center sendButton">
+    <SendRequestButton />
   </div>
 
   <ClientMetadataEditor />
 </div>
 
 <style>
-  .client-container {
-    position: relative;
-    height: 100%;
-  }
-  .client-container .sendButton {
+  .sendButton {
     position: absolute;
     top: 50%;
     left: 50%;

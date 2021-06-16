@@ -9,14 +9,14 @@
 
 <div class="page">
   <ServerConfigController />
-  <Row>
-    <Col>
+  <div class="row flex-expand">
+    <div class="col flex-expand">
       <RequestMonitor />
-    </Col>
-    <Col>
+    </div>
+    <div class="col flex-expand">
       <ResponseMonitor />
-    </Col>
-  </Row>
+    </div>
+  </div>
   <MetadataMonitor />
 </div>
 
