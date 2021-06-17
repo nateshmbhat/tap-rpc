@@ -3,7 +3,7 @@ name: build release
 # Controls when the action will run.
 on:
   release:
-    types: [created,published]
+    types: [published]
     branches: [github_action_test , main]
 
 jobs:
