@@ -25,7 +25,7 @@
   <div>
     <Tabs
       vertical
-      class="primary-text"
+      class="primary-text elevation-1"
       on:change={changeMode}
       value={allModes.indexOf($activeTabConfigStore.rpcOperationMode)}
     >
