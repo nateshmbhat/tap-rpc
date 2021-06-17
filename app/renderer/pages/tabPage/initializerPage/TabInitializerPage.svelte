@@ -1,17 +1,32 @@
 <script lang="ts">
-  import { Container, Divider } from "svelte-materialify/src";
-  import { protoFilesStore } from "../../../../stores";
-  import type { ProtoFile } from "../../../behaviour";
+  import {
+    Container,
+    Divider,
+    TextField,
+    Tooltip
+  } from "svelte-materialify/src";
+  import { appConfigStore } from "../../../../stores/tabStore";
   import ProtoImporter from "../../../components/protoImporter/ProtoImporter.svelte";
   import ProtoPathImporter from "../../../components/protoPathImporter/ProtoPathImporter.svelte";
   import RpcSelector from "../../../components/rpcSelector/RpcSelector.svelte";
 
-  const onProtoLoaded = (protoFiles: ProtoFile[]) => {
-    console.log(protoFiles);
-  };
+  function onTargetServerChanged(inputElement: any) {
+    appConfigStore.setDefaultTargetServerUrl(inputElement.value);
+  }
+
 </script>
 
 <Container>
+  <TextField
+    value={$appConfigStore.defaultTargetServerUrl}
+    on:input={e => onTargetServerChanged(e.target)}
+    placeholder="myserver.com:8080"
+    dense
+    filled>Default Target Server</TextField
+  >
+
+  <div class="ma-1" />
+  <Divider />
   <ProtoPathImporter />
   <div class="ma-2" />
   <Divider />

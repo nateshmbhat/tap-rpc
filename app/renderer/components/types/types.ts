@@ -26,9 +26,10 @@ export interface ClientEditorModel {
     text: string;
     metadata: string;
 }
-export interface TabListConfigModel {
+export interface AppConfigModel {
     tabs: TabConfigModel[];
     activeTabIndex: number;
+    defaultTargetServerUrl :string;
 }
 
 

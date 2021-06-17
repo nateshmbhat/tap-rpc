@@ -13,33 +13,36 @@
   } from 'svelte-materialify/src'
   import {
     activeTabConfigStore,
-    tabListConfigStore,
+    appConfigStore,
   } from '../../stores/tabStore'
-  import { tick } from 'svelte'
+  import { onMount, tick } from 'svelte'
   import TabCloseButton from '../pages/tabPage/components/TabCloseButton.svelte'
   import type { TabConfigModel } from './types/types';
 
-  $: tabs = $tabListConfigStore.tabs
+  $: tabs = $appConfigStore.tabs
 
   const onTabChange = (e: any) => {
     const newIndex = e.detail
     if (newIndex >= 0) {
       console.log('New tab index = ', newIndex)
-      tabListConfigStore.setActiveTab(newIndex)
+      appConfigStore.setActiveTab(newIndex)
     }
   }
 
   const onNewTabClick = () => {
-    tabListConfigStore.addNewTab()
-    tick().then(() => {
-      tabListConfigStore.setActiveTab(tabs.length - 1)
-    })
+    appConfigStore.addNewTab()
   }
 
   const closeTab = (tabIndex: number, tab: TabConfigModel) => {
-    tabListConfigStore.removeTab(tabIndex)
+    appConfigStore.removeTab(tabIndex)
   }
-  $: activeTabIndex = $tabListConfigStore.activeTabIndex
+  $: activeTabIndex = $appConfigStore.activeTabIndex
+
+  onMount(()=>{
+    if($appConfigStore.tabs.length==0){
+      appConfigStore.addNewTab()
+    }
+  })
 </script>
 
 <Tabs

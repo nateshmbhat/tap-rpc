@@ -8,6 +8,7 @@ import { activeTabConfigStore} from "../../stores";
 import { GrpcClientManager } from "../behaviour/grpcClientManager";
 import { get } from "svelte/store";
 import { IncomingRequest, MonitorConnectionStatus, RpcOperationMode } from "../components/types/types";
+import { appConfigStore } from "../../stores/tabStore";
 
 export class RequestHandlerChannel implements IpcRendererChannelInterface {
     getName(): string {
@@ -41,7 +42,7 @@ export class RequestHandlerChannel implements IpcRendererChannelInterface {
                 this.handleRequestInMonitorMode(request, metadataObject, event);
             }
             else if (activeTabConfig.rpcOperationMode == RpcOperationMode.client) {
-                this.handleRequestInClientMode(request, metadataObject, event);
+                this.relayRequestAndResponse(request, metadataObject, event)
             }
             else if (activeTabConfig.rpcOperationMode == RpcOperationMode.mockRpc) {
                 this.handleRequestInMockRpcMode(request, metadataObject, event);
@@ -57,7 +58,7 @@ export class RequestHandlerChannel implements IpcRendererChannelInterface {
             metadata: ProtoUtil.stringify(metadata.getMap()),
             requestMessage: ProtoUtil.stringify(requestObject),
             rpcProtoInfo,
-            url: activeConfig.targetGrpcServerUrl,
+            url: get(appConfigStore).defaultTargetServerUrl,
             onError: (error: any, metaInfo) => {
                 console.table(error)
                 event.sender.send(request.responseChannel!, {
@@ -70,10 +71,6 @@ export class RequestHandlerChannel implements IpcRendererChannelInterface {
             onResponse: (data, metaInfo) => event.sender.send(request.responseChannel!,
                 { data, isStreaming: false, metaInfo } as ResponseInfo)
         })
-    }
-
-    private async handleRequestInClientMode(request: IpcRequest, metadata: Metadata, event: IpcRendererEvent) {
-
     }
 
     private async handleRequestInMonitorMode(request: IpcRequest, metadata: Metadata, event: IpcRendererEvent) {

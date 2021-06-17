@@ -34,4 +34,4 @@ function createAppConfigStore() {
 }
 
 
-export const appConfigStore = createAppConfigStore();
+export const mainProcessAppConfigStore = createAppConfigStore();

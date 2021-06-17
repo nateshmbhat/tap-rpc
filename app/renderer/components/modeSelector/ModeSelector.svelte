@@ -7,7 +7,8 @@
     //@ts-ignore
     ButtonGroupItem,
   } from 'svelte-materialify/src'
-  import { activeTabConfigStore, RpcOperationMode } from '../../../stores'
+  import { activeTabConfigStore } from '../../../stores'
+  import { RpcOperationMode } from '../types/types';
   let modeIndex: number = 0
 
   const modes = Object.values(RpcOperationMode)

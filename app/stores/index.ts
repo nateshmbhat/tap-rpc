@@ -1,4 +1,4 @@
-export { appConfigStore } from "./appConfigStore";
+export { mainProcessAppConfigStore } from "./appConfigStore";
 export type { MainProcessAppConfigModel, RequestResponseEditorModel } from "./appConfigStore";
 
 export { protoFilesStore, protoImportPathsStore } from "./protoFiles";
