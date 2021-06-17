@@ -1,7 +1,7 @@
 
 import { get } from 'svelte/store';
 import { ProtoUtil } from '../../commons/utils';
-import { activeTabConfigStore, appConfigStore, RpcOperationMode } from '../../stores';
+import { activeTabConfigStore } from '../../stores';
 import { EditorDataFlowMode, MonitorConnectionStatus } from '../components/types/types';
 import type { ResponseInfo, RpcProtoInfo } from './models';
 import { EditorEventType } from './responseStateController';

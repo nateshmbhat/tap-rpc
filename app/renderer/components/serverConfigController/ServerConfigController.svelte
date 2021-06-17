@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { activeTabConfigStore, appConfigStore } from "../../../stores";
+  import { activeTabConfigStore } from "../../../stores";
   import { Button, Card, Checkbox, TextField } from "svelte-materialify/src";
   import { CertificateUtil } from "../../../commons/utils/certificateUtil";
   import { Switch } from "svelte-materialify";
@@ -22,9 +22,9 @@
 
 </script>
 
-<Card class="align-self-center mb-1 pa-1 pl-2 pr-2">
+<Card class="mb-1 pa-1 pl-2 pr-2">
   <div class="row">
-    <div>
+    <div class="flex-expand">
       <TextField
         value={targetServer}
         on:input={e => onTargetServerChanged(e.target)}
@@ -34,14 +34,12 @@
       >
     </div>
 
-    <Button
-      on:click={onUseTlsCheckboxChanged}
-      outlined
-      rounded
-      class="row pl-2 pr-2 pt-1 ml-2 align-self-center"
+    <Switch
+      class="ml-5 mr-5"
+      checked={tlsCert != undefined}
+      on:change={onUseTlsCheckboxChanged}
     >
-      <Switch checked={tlsCert != undefined} />
-      Use TLS
-    </Button>
+      Use TLS</Switch
+    >
   </div>
 </Card>

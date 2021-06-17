@@ -1,8 +1,7 @@
 import { derived, writable } from "svelte/store";
 import type { Certificate, RpcProtoInfo } from "../renderer/behaviour";
-import { RpcOperationMode } from "./appConfigStore";
 import { EditorEventEmitter } from "../renderer/behaviour/responseStateController";
-import { ClientEditorModel, EditorDataFlowMode, MonitorConnectionStatus, MonitorRequestEditorModel, MonitorResponseEditorModel, TabConfigModel, TabListConfigModel, } from "../renderer/components/types/types";
+import { ClientEditorModel, EditorDataFlowMode, MonitorConnectionStatus, MonitorRequestEditorModel, MonitorResponseEditorModel, RpcOperationMode, TabConfigModel, AppConfigModel, } from "../renderer/components/types/types";
 import immer from "immer";
 
 
@@ -26,16 +25,24 @@ function getDefaultTabConfig(): TabConfigModel {
     });
 }
 
-function createTabListConfigStore() {
+function createAppConfigStore() {
     const defaultTabConfig = getDefaultTabConfig();
-    const { set, subscribe, update } = writable<TabListConfigModel>({
+    const { set, subscribe, update } = writable<AppConfigModel>({
         activeTabIndex: 0,
         tabs: [defaultTabConfig],
+        defaultTargetServerUrl: defaultTabConfig.targetGrpcServerUrl,
     });
     return {
         subscribe,
         setActiveTab: (index: number) => update((store) => ({ ...store, activeTabIndex: index })),
-        setValue: async (tabConfigListModel: TabListConfigModel) => set(tabConfigListModel),
+        setValue: async (tabConfigListModel: AppConfigModel) => set(tabConfigListModel),
+        setDefaultTargetServerUrl: (targetServer: string) => update(store => {
+            const tabs = store.tabs
+            if (tabs.length == 1) {
+                tabs[0].targetGrpcServerUrl = targetServer
+            }
+            return ({ ...store, defaultTargetServerUrl: targetServer });
+        }),
         setTabValue: (newTabConfig: TabConfigModel, tabId: string) => update((store) => {
             return immer(store, (draftStore) => {
                 for (let [index, tabConfig] of draftStore.tabs.entries()) {
@@ -44,7 +51,6 @@ function createTabListConfigStore() {
                     }
                 }
             })
-
         }),
         setActiveTabSelectedRpc: (rpcInfo: RpcProtoInfo) => update((config) => {
             const activeTab = config.tabs[config.activeTabIndex]
@@ -97,10 +103,13 @@ function createTabListConfigStore() {
         addNewTab: () => update((config) => {
             const allTabs = Array.from(config.tabs)
             const newTabConfig = getDefaultTabConfig()
-            newTabConfig.targetGrpcServerUrl = allTabs[0].targetGrpcServerUrl
+            newTabConfig.targetGrpcServerUrl = config.defaultTargetServerUrl
+            if (allTabs.length > 0) {
+                newTabConfig.clientRequestEditorState.metadata = allTabs[0].clientRequestEditorState.metadata
+            }
             const newTab = { ...newTabConfig, id: allTabs.length.toString() }
             allTabs.push(newTab)
-            return { ...config, tabs: allTabs }
+            return { ...config, tabs: allTabs, activeTabIndex: allTabs.length - 1 }
         }),
         setTlsCertificate: (tlsCertificate: Certificate | undefined) => update((config) => {
             const allTabs = Array.from(config.tabs)
@@ -119,10 +128,10 @@ function createTabListConfigStore() {
     };
 }
 
-export const tabListConfigStore = createTabListConfigStore()
+export const appConfigStore = createAppConfigStore()
 
 function createActiveTabConfigStore() {
-    const { subscribe } = derived(tabListConfigStore, (configStore) => {
+    const { subscribe } = derived(appConfigStore, (configStore) => {
         return configStore.tabs[configStore.activeTabIndex]
     })
 
@@ -130,18 +139,18 @@ function createActiveTabConfigStore() {
         subscribe,
         setSelectedRpc: (rpcInfo: RpcProtoInfo) => {
             console.log("Seleted RPC : ", rpcInfo.methodName)
-            return tabListConfigStore.setActiveTabSelectedRpc(rpcInfo);
+            return appConfigStore.setActiveTabSelectedRpc(rpcInfo);
         },
-        setTargetGrpcServerUrl: (url: string) => tabListConfigStore.setActiveTabTargetGrpcServerUrl(url),
+        setTargetGrpcServerUrl: (url: string) => appConfigStore.setActiveTabTargetGrpcServerUrl(url),
         setRpcOperationMode: async (mode: RpcOperationMode) => {
-            tabListConfigStore.setActiveTabRpcOperationMode(mode);
+            appConfigStore.setActiveTabRpcOperationMode(mode);
         },
-        setMonitorRequestEditorState: (editorModel: MonitorRequestEditorModel) => tabListConfigStore.setActiveTabMonitorRequestEditorState(editorModel),
-        setTlsCertificate: (tlsCertificate: Certificate | undefined) => tabListConfigStore.setTlsCertificate(tlsCertificate),
-        setMonitorResponseEditorState: (editorModel: MonitorResponseEditorModel) => tabListConfigStore.setActiveTabMonitorResponseEditorState(editorModel),
-        setClientRequestEditorState: (editorModel: ClientEditorModel) => tabListConfigStore.setActiveTabClientRequestEditorState(editorModel),
-        setClientResponseEditorState: (editorModel: ClientEditorModel) => tabListConfigStore.setActiveTabClientResponseEditorState(editorModel),
-        setMockRpcEditorText: (text: string) => tabListConfigStore.setActiveTabMockRpcEditorText(text),
+        setMonitorRequestEditorState: (editorModel: MonitorRequestEditorModel) => appConfigStore.setActiveTabMonitorRequestEditorState(editorModel),
+        setTlsCertificate: (tlsCertificate: Certificate | undefined) => appConfigStore.setTlsCertificate(tlsCertificate),
+        setMonitorResponseEditorState: (editorModel: MonitorResponseEditorModel) => appConfigStore.setActiveTabMonitorResponseEditorState(editorModel),
+        setClientRequestEditorState: (editorModel: ClientEditorModel) => appConfigStore.setActiveTabClientRequestEditorState(editorModel),
+        setClientResponseEditorState: (editorModel: ClientEditorModel) => appConfigStore.setActiveTabClientResponseEditorState(editorModel),
+        setMockRpcEditorText: (text: string) => appConfigStore.setActiveTabMockRpcEditorText(text),
     };
 }
 

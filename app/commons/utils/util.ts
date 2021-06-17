@@ -1,9 +1,9 @@
 import { remote } from "electron";
 import type { OpenDialogReturnValue } from "electron/main";
 import { loadProtos, RpcProtoInfo } from "../../renderer/behaviour";
-import { appConfigStore, protoFilesStore, servicesStore } from "../../stores";
+import { protoFilesStore, servicesStore } from "../../stores";
 import faker from 'faker';
-import { tabListConfigStore } from "../../stores/tabStore";
+import { appConfigStore } from "../../stores/tabStore";
 import { get } from "svelte/store";
 import type { IncomingRequest, TabConfigModel } from "../../renderer/components/types/types";
 import { Metadata } from "@grpc/grpc-js";
@@ -57,7 +57,7 @@ export class ProtoUtil {
 
 export class TabUtil {
     static async getTabConfigFromRpc(rpcProtoInfo: RpcProtoInfo): Promise<TabConfigModel | undefined> {
-        const appConfig = get(tabListConfigStore)
+        const appConfig = get(appConfigStore)
         return appConfig.tabs.find((tabModel, index, allTabs) => {
             const rpc = tabModel.selectedRpc
             return rpc?.serviceName == rpcProtoInfo.serviceName && rpc.methodName == rpcProtoInfo.methodName

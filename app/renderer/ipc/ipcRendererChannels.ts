@@ -4,10 +4,11 @@ import { requestInterceptor, ResponseError, ResponseInfo, responseInterceptor } 
 import { IpcChannel, IpcRendererChannelInterface, IpcRequest } from "../../commons/ipc/ipcChannelInterface";
 import { ProtoUtil } from "../../commons/utils";
 import { TabUtil } from "../../commons/utils/util";
-import { activeTabConfigStore, RpcOperationMode } from "../../stores";
+import { activeTabConfigStore} from "../../stores";
 import { GrpcClientManager } from "../behaviour/grpcClientManager";
 import { get } from "svelte/store";
-import { IncomingRequest, MonitorConnectionStatus } from "../components/types/types";
+import { IncomingRequest, MonitorConnectionStatus, RpcOperationMode } from "../components/types/types";
+import { appConfigStore } from "../../stores/tabStore";
 
 export class RequestHandlerChannel implements IpcRendererChannelInterface {
     getName(): string {
@@ -32,23 +33,16 @@ export class RequestHandlerChannel implements IpcRendererChannelInterface {
         const rpcTab = await TabUtil.getTabConfigFromRpc(rpcProtoInfo)
 
         if (rpcTab == undefined || activeTabConfig.id != rpcTab.id) {
-            GrpcClientManager.sendRequest({
-                requestMessage: ProtoUtil.stringify(requestObject),
-                metadata: ProtoUtil.stringify(metadataObject),
-                rpcProtoInfo,
-                url: activeTabConfig.targetGrpcServerUrl,
-                onResponse: (data, metaInfo) => event.sender.send(request.responseChannel!, { data: data }),
-                onError: (e, metaInfo) => event.sender.send(request.responseChannel!, e)
-            })
+            this.relayRequestAndResponse(request, metadataObject, event)
             return
         }
-        if (activeTabConfig.id == rpcTab.id) {
+        else if (activeTabConfig.id == rpcTab.id) {
             // rpc call was meant for active tab
             if (activeTabConfig.rpcOperationMode == RpcOperationMode.monitor) {
                 this.handleRequestInMonitorMode(request, metadataObject, event);
             }
             else if (activeTabConfig.rpcOperationMode == RpcOperationMode.client) {
-                this.handleRequestInClientMode(request, metadataObject, event);
+                this.relayRequestAndResponse(request, metadataObject, event)
             }
             else if (activeTabConfig.rpcOperationMode == RpcOperationMode.mockRpc) {
                 this.handleRequestInMockRpcMode(request, metadataObject, event);
@@ -56,8 +50,27 @@ export class RequestHandlerChannel implements IpcRendererChannelInterface {
         }
     }
 
-    private async handleRequestInClientMode(request: IpcRequest, metadata: Metadata, event: IpcRendererEvent) {
-
+    private async relayRequestAndResponse(request: IpcRequest, metadata: Metadata, event: IpcRendererEvent) {
+        const { serviceName, methodName, requestObject }: IncomingRequest = request.params
+        const rpcProtoInfo = await ProtoUtil.getMethodRpc(serviceName, methodName)
+        const activeConfig = get(activeTabConfigStore)
+        GrpcClientManager.sendRequest({
+            metadata: ProtoUtil.stringify(metadata.getMap()),
+            requestMessage: ProtoUtil.stringify(requestObject),
+            rpcProtoInfo,
+            url: get(appConfigStore).defaultTargetServerUrl,
+            onError: (error: any, metaInfo) => {
+                console.table(error)
+                event.sender.send(request.responseChannel!, {
+                    error: { code: error.code, details: error.details, message: error.message },
+                    data: {},
+                    isStreaming: false,
+                    metaInfo: {}
+                } as ResponseInfo);
+            },
+            onResponse: (data, metaInfo) => event.sender.send(request.responseChannel!,
+                { data, isStreaming: false, metaInfo } as ResponseInfo)
+        })
     }
 
     private async handleRequestInMonitorMode(request: IpcRequest, metadata: Metadata, event: IpcRendererEvent) {

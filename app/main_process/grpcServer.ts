@@ -1,5 +1,5 @@
 import * as grpc from '@grpc/grpc-js'
-import { AppConfigModel, appConfigStore } from '../stores';
+import { MainProcessAppConfigModel, mainProcessAppConfigStore } from '../stores';
 import type { ProtoService, ResponseError } from '../renderer/behaviour';
 import { responseInterceptor } from '../renderer/behaviour';
 import { ipcRenderer } from 'electron';
@@ -39,7 +39,7 @@ function addGrpcServices(server: grpc.Server | null, serviceProtos: ProtoService
 export const startProxyGrpcServer = async (serviceProtos: ProtoService[]): Promise<void> => {
   const grpcServer = new grpc.Server();
   addGrpcServices(grpcServer, serviceProtos)
-  const config = get(appConfigStore)
+  const config = get(mainProcessAppConfigStore)
   if (config.proxyGrpcServer) {
     console.warn('mock server already running. Restarting Server with updated protos');
     config.proxyGrpcServer.forceShutdown();
@@ -51,7 +51,7 @@ export const startProxyGrpcServer = async (serviceProtos: ProtoService[]): Promi
     else {
       console.log("Started server at port : ", port)
       grpcServer.start();
-      appConfigStore.setProxyGrpcServer(grpcServer)
+      mainProcessAppConfigStore.setProxyGrpcServer(grpcServer)
     }
   });
 }
