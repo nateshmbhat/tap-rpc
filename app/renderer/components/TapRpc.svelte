@@ -48,7 +48,7 @@
 <Tabs
   centerActive
   slider={false}
-  class="primary-text"
+  class="primary-text elevation-1"
   value={activeTabIndex}
   on:change={onTabChange}
 >
