@@ -3,6 +3,7 @@
   import { activeTabConfigStore } from "../../../stores";
   import { ProtoUtil } from "../../../commons/utils";
   import { GrpcClientManager } from "../../behaviour/grpcClientManager";
+  import { mdiPause, mdiPlay } from "@mdi/js";
   let requestInProgress = false;
 
   const setResponseEditorText = (text: string) => {
@@ -13,12 +14,17 @@
   };
 
   async function onClick(e: any) {
-    if (requestInProgress) return;
+    const clientRequestState = $activeTabConfigStore.clientRequestEditorState;
+    if (requestInProgress) {
+      requestInProgress =false;
+      clientRequestState.requestCallEventEmitter?.cancel()
+      return;
+    }
     requestInProgress = true;
-    const requestModel = $activeTabConfigStore.clientRequestEditorState;
-    GrpcClientManager.sendRequest({
-      requestMessage: requestModel.text,
-      metadata: requestModel.metadata,
+    
+    const eventEmitter = GrpcClientManager.sendRequest({
+      requestMessage: clientRequestState.text,
+      metadata: clientRequestState.metadata,
       url: $activeTabConfigStore.targetGrpcServerUrl,
       rpcProtoInfo: $activeTabConfigStore.selectedRpc!,
       tlsCertificate: $activeTabConfigStore.tlsCertificate,
@@ -28,13 +34,23 @@
         setResponseEditorText(ProtoUtil.stringify(response)),
       onCallEnd: () => (requestInProgress = false)
     });
+
+    activeTabConfigStore.setClientRequestEditorState({
+      ...clientRequestState,
+      requestCallEventEmitter : eventEmitter
+    })
   }
 </script>
 
-<Button on:click={onClick} size="small" class="primary-color" fab>
+<Button
+  on:click={onClick}
+  style="background-color:{requestInProgress ? 'red' : 'green'}"
+  size="small"
+  fab
+>
   {#if requestInProgress}
-    <ProgressCircular indeterminate color="primary" />
+    <Icon path={mdiPause} style="color:white;" />
   {:else}
-    <Icon class="mdi mdi-play" />
+    <Icon path={mdiPlay} style="color:white;" />
   {/if}
 </Button>

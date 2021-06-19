@@ -8,11 +8,11 @@ type OnError = (error: Error, metaInfo: ResponseMetaInformation) => void
 type OnCallEnd = () => void
 
 class GrpcClientManager {
-    static sendRequest = ({ requestMessage, metadata = '{}', url, rpcProtoInfo, onResponse, onError, onCallEnd, tlsCertificate }:
+    static sendRequest({ requestMessage, metadata = '{}', url, rpcProtoInfo, onResponse, onError, onCallEnd, tlsCertificate }:
         {
             requestMessage: string, metadata: string, url: string, rpcProtoInfo: RpcProtoInfo, onResponse?: OnResponse, onError?: OnError, onCallEnd?: OnCallEnd,
             tlsCertificate?: Certificate
-        }) => {
+        }): GRPCEventEmitter {
         const grpcRequest: GRPCEventEmitter = new GRPCRequest({
             inputs: requestMessage,
             metadata,
@@ -47,6 +47,7 @@ class GrpcClientManager {
             console.error(e);
             grpcRequest.emit(GRPCEventType.END);
         }
+        return grpcRequest
     }
 }
 

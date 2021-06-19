@@ -1,4 +1,4 @@
-import type { Certificate, RpcProtoInfo } from "../../behaviour";
+import type { Certificate, GRPCEventEmitter, RpcProtoInfo } from "../../behaviour";
 import type { EditorEventEmitter } from "../../behaviour/responseStateController";
 
 export enum MonitorConnectionStatus {
@@ -25,11 +25,12 @@ export interface TabConfigModel {
 export interface ClientEditorModel {
     text: string;
     metadata: string;
+    requestCallEventEmitter?: GRPCEventEmitter;
 }
 export interface AppConfigModel {
     tabs: TabConfigModel[];
     activeTabIndex: number;
-    defaultTargetServerUrl :string;
+    defaultTargetServerUrl: string;
 }
 
 
