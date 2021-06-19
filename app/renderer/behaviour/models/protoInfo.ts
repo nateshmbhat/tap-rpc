@@ -11,19 +11,26 @@ export class RpcProtoInfo {
   mockRequestPayloadString: string;
   mockResponsePayload: MethodPayload;
   mockRequestPayload: MethodPayload;
+  mockRequestTemplate: MethodPayload;
   mockResponsePayloadString: string;
+  mockResponseTemplate: MethodPayload;
   client: any;
   serviceName: string;
   private serviceDef: Service;
 
   constructor(service: ProtoService, methodName: string) {
     this.methodName = methodName;
-    const requestPayload = FakerUtil.generateFakeJsonObject(service.requestMocks[this.methodName]().plain);
+    this.mockRequestTemplate = service.requestMocks[this.methodName]()
+    this.mockResponseTemplate = service.responseMocks[this.methodName]()
+
+    const requestPayload = FakerUtil.getNewMockJsonObject(this.mockRequestTemplate);
     this.mockRequestPayload = { message: new Message(requestPayload), plain: requestPayload }
     this.mockRequestPayloadString = ProtoUtil.stringify(this.mockRequestPayload.plain)
-    const responsePayload = FakerUtil.generateFakeJsonObject(service.responseMocks[this.methodName]().plain);
+
+    const responsePayload = FakerUtil.getNewMockJsonObject(this.mockResponseTemplate);
     this.mockResponsePayload = { message: new Message(responsePayload), plain: responsePayload }
     this.mockResponsePayloadString = ProtoUtil.stringify(this.mockResponsePayload.plain)
+
     this.client = lodashGet(service.proto.ast, service.serviceName);
     this.serviceDef = service.proto.root.lookupService(service.serviceName);
     this.serviceName = this.serviceDef.name

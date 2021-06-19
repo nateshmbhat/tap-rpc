@@ -1,0 +1,16 @@
+diff --git a/node_modules/bloomrpc-mock-js/lib/automock.js b/node_modules/bloomrpc-mock-js/lib/automock.js
+index 1a4ff45..4404484 100644
+--- a/node_modules/bloomrpc-mock-js/lib/automock.js
++++ b/node_modules/bloomrpc-mock-js/lib/automock.js
+@@ -100,8 +100,9 @@ function mockTypeFields(type) {
+  * Mock enum
+  */
+ function mockEnum(enumType) {
+-    const enumKey = Object.keys(enumType.values)[0];
+-    return enumType.values[enumKey];
++    let enumValuesList = Object.values(enumType.values).sort()
++    if(enumValuesList.length==0) enumValuesList.push(0)
++    return `taprpc_enum:${enumValuesList.join('-')}`
+ }
+ /**
+  * Mock a field

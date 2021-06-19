@@ -10,11 +10,16 @@
     activeTabConfigStore.setMockRpcEditorText(msg);
 
   const onGenerateMockResponse = () => {
-    const newResponse = FakerUtil.generateFakeJsonObject(
-      JSON.parse(editorText)
+    const selectedRpc = $activeTabConfigStore.selectedRpc;
+    if (selectedRpc == null) return;
+    const newMockResponse = FakerUtil.getNewMockJsonObject(
+      selectedRpc.mockResponseTemplate
     );
-    activeTabConfigStore.setMockRpcEditorText(ProtoUtil.stringify(newResponse));
+    activeTabConfigStore.setMockRpcEditorText(
+      ProtoUtil.stringify(newMockResponse)
+    );
   };
+
 </script>
 
 <div class="box">
@@ -46,4 +51,5 @@
     display: flex;
     flex-direction: column;
   }
+
 </style>

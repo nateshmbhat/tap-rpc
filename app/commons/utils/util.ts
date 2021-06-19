@@ -2,11 +2,13 @@ import { remote } from "electron";
 import type { OpenDialogReturnValue } from "electron/main";
 import { loadProtos, RpcProtoInfo } from "../../renderer/behaviour";
 import { protoFilesStore, servicesStore } from "../../stores";
-import faker from 'faker';
+import faker, { random } from 'faker';
 import { appConfigStore } from "../../stores/tabStore";
 import { get } from "svelte/store";
 import type { IncomingRequest, TabConfigModel } from "../../renderer/components/types/types";
 import { Metadata } from "@grpc/grpc-js";
+import type { MethodPayload } from "bloomrpc-mock-js";
+import { randomInt } from "crypto";
 
 export class ProtoUtil {
     static async getMethodRpc(serviceName: string, methodName: string): Promise<RpcProtoInfo> {
@@ -90,7 +92,12 @@ export class FileSystemUtil {
 
 
 export class FakerUtil {
-    static generateFakeJsonObject(object: { [key: string]: any }): Object {
+
+    static getNewMockJsonObject(payloadTemplate: MethodPayload): Object {
+        return this.generateMockJsonObject(payloadTemplate.plain)
+    }
+
+    private static generateMockJsonObject(object: { [key: string]: any }): Object {
         const result: { [key: string]: any } = {}
         for (let [key, value] of Object.entries(object)) {
             if (typeof value === 'string') {
@@ -117,7 +124,7 @@ export class FakerUtil {
                         newArray[arrayIndex] = this.getNumberValue(key, arrayItem)
                     }
                     else if (typeof arrayItem === 'object') {
-                        const newArrayItem = this.generateFakeJsonObject(arrayItem)
+                        const newArrayItem = this.generateMockJsonObject(arrayItem)
                         newArray[arrayIndex] = newArrayItem
                     }
                 }
@@ -125,13 +132,21 @@ export class FakerUtil {
             }
 
             else if (typeof value === 'object') {
-                result[key] = this.generateFakeJsonObject(value)
+                result[key] = this.generateMockJsonObject(value)
             }
         }
         return result
     }
 
-    private static getStringValue(key: string, value: string): string {
+    //returns number when the value contains encoded enum values
+    private static getStringValue(key: string, value: string): string | number {
+        if (value.startsWith('taprpc_enum:')) {
+            const enumRegex = RegExp(/^taprpc_enum:([\d-]+)$/)
+            const regexResults = enumRegex.exec(value)
+            if (regexResults === null) return 0
+            const numberList = regexResults[1].split('-').map(n=>parseInt(n))
+            return numberList[random.number(numberList.length-1)] 
+        }
         key = key.trim().toLowerCase().replace(' ', '').replace('_', '')
         switch (key) {
             case 'zipcode': return faker.address.zipCode()
