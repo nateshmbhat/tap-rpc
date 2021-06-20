@@ -9,6 +9,14 @@ export enum MonitorConnectionStatus {
     onHold
 }
 
+export interface MockRpcEditorModel {
+    responseText: string;
+    error?: {
+        code: number,
+        details: string,
+    }
+}
+
 export interface TabConfigModel {
     id: string;
     selectedRpc: RpcProtoInfo | undefined;
@@ -19,7 +27,7 @@ export interface TabConfigModel {
     tlsCertificate?: Certificate,
     clientRequestEditorState: ClientEditorModel;
     clientResponseEditorState: ClientEditorModel;
-    mockRpcEditorText: string;
+    mockRpcEditorState: MockRpcEditorModel;
 }
 
 export interface ClientEditorModel {
