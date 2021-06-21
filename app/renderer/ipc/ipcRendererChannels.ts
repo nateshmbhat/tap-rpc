@@ -4,7 +4,7 @@ import { requestInterceptor, ResponseError, ResponseInfo, responseInterceptor } 
 import { IpcChannel, IpcRendererChannelInterface, IpcRequest } from "../../commons/ipc/ipcChannelInterface";
 import { ProtoUtil } from "../../commons/utils";
 import { TabUtil } from "../../commons/utils/util";
-import { activeTabConfigStore} from "../../stores";
+import { activeTabConfigStore } from "../../stores";
 import { GrpcClientManager } from "../behaviour/grpcClientManager";
 import { get } from "svelte/store";
 import { IncomingRequest, MonitorConnectionStatus, RpcOperationMode } from "../components/types/types";
@@ -104,8 +104,13 @@ export class RequestHandlerChannel implements IpcRendererChannelInterface {
     }
 
     private async handleRequestInMockRpcMode(request: IpcRequest, metadata: Metadata, event: IpcRendererEvent) {
-        const mockResponse = get(activeTabConfigStore).mockRpcEditorText
-        event.sender.send(request.responseChannel!, { data: JSON.parse(mockResponse) })
+        const { error, responseText } = get(activeTabConfigStore).mockRpcEditorState
+        if (error === undefined) {
+            event.sender.send(request.responseChannel!, { data: JSON.parse(responseText) })
+        }
+        else {
+            event.sender.send(request.responseChannel!, { error: { code: error.code, details: error.details, message: error.details }, data: {}, isStreaming: false, metaInfo: {} } as ResponseInfo);
+        }
     }
 }
 

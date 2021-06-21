@@ -1,7 +1,6 @@
 <script lang="ts">
   import ServerConfigController from "../../../components/serverConfigController/ServerConfigController.svelte";
   import SendRequestButton from "../../../components/sendRequestButton/SendRequestButton.svelte";
-  import { Col, Row } from "svelte-materialify/src";
   import GenericEditor from "../../../components/editors/GenericEditor.svelte";
   import { activeTabConfigStore } from "../../../../stores";
   import { onMount } from "svelte";

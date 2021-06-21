@@ -1,7 +1,7 @@
 import { derived, writable } from "svelte/store";
 import type { Certificate, RpcProtoInfo } from "../renderer/behaviour";
 import { EditorEventEmitter } from "../renderer/behaviour/responseStateController";
-import { ClientEditorModel, EditorDataFlowMode, MonitorConnectionStatus, MonitorRequestEditorModel, MonitorResponseEditorModel, RpcOperationMode, TabConfigModel, AppConfigModel, } from "../renderer/components/types/types";
+import { ClientEditorModel, EditorDataFlowMode, MonitorConnectionStatus, MonitorRequestEditorModel, MonitorResponseEditorModel, RpcOperationMode, TabConfigModel, AppConfigModel, MockRpcEditorModel, } from "../renderer/components/types/types";
 import immer from "immer";
 
 
@@ -21,7 +21,7 @@ function getDefaultTabConfig(): TabConfigModel {
             eventEmitter: new EditorEventEmitter(), dataFlowMode: EditorDataFlowMode.passThrough
         },
         clientResponseEditorState: { text: '', metadata: '' },
-        mockRpcEditorText: '{}'
+        mockRpcEditorState: { responseText: '{}' }
     });
 }
 
@@ -94,10 +94,10 @@ function createAppConfigStore() {
             allTabs[config.activeTabIndex] = { ...activeTab, clientResponseEditorState: responseEditorModel }
             return { ...config, tabs: allTabs }
         }),
-        setActiveTabMockRpcEditorText: (text: string) => update((config) => {
+        setActiveTabMockRpcEditorModel: (editorModel: MockRpcEditorModel) => update((config) => {
             const activeTab = config.tabs[config.activeTabIndex]
             const allTabs = Array.from(config.tabs)
-            allTabs[config.activeTabIndex] = { ...activeTab, mockRpcEditorText: text }
+            allTabs[config.activeTabIndex] = { ...activeTab, mockRpcEditorState: editorModel }
             return { ...config, tabs: allTabs }
         }),
         addNewTab: () => update((config) => {
@@ -150,7 +150,7 @@ function createActiveTabConfigStore() {
         setMonitorResponseEditorState: (editorModel: MonitorResponseEditorModel) => appConfigStore.setActiveTabMonitorResponseEditorState(editorModel),
         setClientRequestEditorState: (editorModel: ClientEditorModel) => appConfigStore.setActiveTabClientRequestEditorState(editorModel),
         setClientResponseEditorState: (editorModel: ClientEditorModel) => appConfigStore.setActiveTabClientResponseEditorState(editorModel),
-        setMockRpcEditorText: (text: string) => appConfigStore.setActiveTabMockRpcEditorText(text),
+        setMockRpcEditorState: (editorModel: MockRpcEditorModel) => appConfigStore.setActiveTabMockRpcEditorModel(editorModel),
     };
 }
 
