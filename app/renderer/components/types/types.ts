@@ -1,4 +1,4 @@
-import type { Certificate, RpcProtoInfo } from "../../behaviour";
+import type { Certificate, GRPCEventEmitter, RpcProtoInfo } from "../../behaviour";
 import type { EditorEventEmitter } from "../../behaviour/responseStateController";
 
 export enum MonitorConnectionStatus {
@@ -7,6 +7,14 @@ export enum MonitorConnectionStatus {
 
     //connection alive. Data on hold
     onHold
+}
+
+export interface MockRpcEditorModel {
+    responseText: string;
+    error?: {
+        code: number,
+        details: string,
+    }
 }
 
 export interface TabConfigModel {
@@ -19,17 +27,18 @@ export interface TabConfigModel {
     tlsCertificate?: Certificate,
     clientRequestEditorState: ClientEditorModel;
     clientResponseEditorState: ClientEditorModel;
-    mockRpcEditorText: string;
+    mockRpcEditorState: MockRpcEditorModel;
 }
 
 export interface ClientEditorModel {
     text: string;
     metadata: string;
+    requestCallEventEmitter?: GRPCEventEmitter;
 }
 export interface AppConfigModel {
     tabs: TabConfigModel[];
     activeTabIndex: number;
-    defaultTargetServerUrl :string;
+    defaultTargetServerUrl: string;
 }
 
 

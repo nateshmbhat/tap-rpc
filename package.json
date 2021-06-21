@@ -18,7 +18,7 @@
     "package-all": "yarn build && electron-builder build -mwl",
     "package-linux": "yarn build && electron-builder build --linux",
     "package-win": "yarn build && electron-builder build --win --x64",
-    "postinstall": "node internals/scripts/CheckNativeDep.js && electron-builder install-app-deps",
+    "postinstall": "patch-package && node internals/scripts/CheckNativeDep.js && electron-builder install-app-deps",
     "prestart": "yarn build"
   },
   "build": {
@@ -143,6 +143,7 @@
     "node-sass": "^4.12.0",
     "npm-logical-tree": "^1.2.1",
     "optimize-css-assets-webpack-plugin": "^5.0.1",
+    "patch-package": "^6.4.7",
     "postcss": "^8.2.5",
     "prettier": "^1.16.4",
     "sass": "^1.32.6",

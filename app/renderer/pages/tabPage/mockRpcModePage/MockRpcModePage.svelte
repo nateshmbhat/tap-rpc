@@ -1,18 +1,31 @@
 <script lang="ts">
-  import { onMount } from 'svelte'
-  import { activeTabConfigStore } from '../../../../stores'
+  import { onMount } from "svelte";
+  import { Switch } from "svelte-materialify/src";
+  import { activeTabConfigStore } from "../../../../stores";
+  import MockRpcErrorEditor from "./components/MockRpcErrorEditor.svelte";
 
-  import MockRpcEditor from '../../../components/editors/MockRpcEditor.svelte'
+  let sendErrorResponse = false;
+  import MockRpcResponseEditor from "./components/MockRpcResponseEditor.svelte";
 
-  onMount(() => {
-    if ($activeTabConfigStore.selectedRpc != null) {
-      activeTabConfigStore.setMockRpcEditorText(
-        $activeTabConfigStore.selectedRpc.mockResponsePayloadString,
-      )
-    }
-  })
 </script>
 
-<div>
-  <MockRpcEditor />
+<div class="page">
+  <Switch class="ml-5 mr-5 align-self-center" bind:checked={sendErrorResponse}>
+    <div style="cursor: pointer;">Send Error</div>
+  </Switch>
+
+  {#if sendErrorResponse}
+    <MockRpcErrorEditor />
+  {:else}
+    <MockRpcResponseEditor />
+  {/if}
 </div>
+
+<style>
+  .page {
+    height: calc(100vh - 52px);
+    display: flex;
+    flex-flow: column;
+  }
+
+</style>
