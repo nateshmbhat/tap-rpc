@@ -15,6 +15,17 @@
 
 **Tap Rpc** is a tool that aids in proto based dynamic generation of **mock server**, real time **request/response editor** and provides **client** to significantly speed up work for all of frontend, backend and testers.
 
+## Installation and Usage :
+
+- Download the latest release from here : https://github.com/nateshmbhat/tap-rpc/releases
+
+- In your client app, set the host and port for the grpc service to point to the Tap-Rpc’s ip address and port shown at the middle of the Tap-Rpc window title.
+- Set the default target server URL, which is needed for the monitor and client modes.
+- User selects the proto files containing the services. Once you select proto files, all the services and Rpcs in those services appear in a tree structure and you can select a particular rpc.
+- At this point any requests coming from the client will be forwarded to the default target server in the background.
+- Now your client app is ready to access all the features of Tap-Rpc.
+
+
 ## Features
 
 ### **Tap Rpc** provides 3 modes of operation :
