@@ -7,5 +7,6 @@ export class ElectronDiskStorage {
     ProtoPathDiskStore.clear();
     ProtoFilesDiskStore.clear();
     TlsCertDiskStore.clear();
+    TlsCertDiskStore.clear();
   }
 }

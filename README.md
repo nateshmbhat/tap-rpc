@@ -13,7 +13,7 @@
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
   
 
-**Tap Rpc** is a tool that aids in proto based dynamic generation of **mock server**, real time **request/response editor** and provides **client** to significantly speed up work for all of frontend, backend and testers.
+**Tap Rpc** is a tool that lets developers easily create **mock server** that sends realistic mock responses automatically for all rpcs across multiple grpc services by just loading the proto files, allows you to monitor and modify requests and responses exchanged between client and server in real time and provides **grpc client** to significantly speed up work for all of frontend, backend and testers.
 
 ## Features
 

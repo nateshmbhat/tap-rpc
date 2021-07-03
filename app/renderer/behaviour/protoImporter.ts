@@ -1,4 +1,3 @@
-import { remote } from 'electron';
 import { fromFileName, mockRequestMethods, mockResponseMethods, Proto, walkServices } from 'bloomrpc-mock-js';
 import * as path from "path";
 import type { ProtoFile, ProtoService } from './models/models';
@@ -82,7 +81,7 @@ function parseServices(proto: Proto) {
 
     const serviceMethods: { [key: string]: RpcProtoInfo } = {}
     Object.keys(requestMocks)
-      .forEach(methodName => serviceMethods[methodName] = new RpcProtoInfo(serviceObject, methodName))
+      .forEach(methodName => serviceMethods[methodName] = new RpcProtoInfo(proto.fileName, serviceObject, methodName))
     serviceObject.methods = serviceMethods
     services[serviceName] = serviceObject
   });

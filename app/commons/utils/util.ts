@@ -3,12 +3,11 @@ import type { OpenDialogReturnValue } from "electron/main";
 import { loadProtos, RpcProtoInfo } from "../../renderer/behaviour";
 import { protoFilesStore, servicesStore } from "../../stores";
 import faker, { random } from 'faker';
-import { appConfigStore } from "../../stores/tabStore";
 import { get } from "svelte/store";
 import type { IncomingRequest, TabConfigModel } from "../../renderer/components/types/types";
 import { Metadata } from "@grpc/grpc-js";
 import type { MethodPayload } from "bloomrpc-mock-js";
-import { randomInt } from "crypto";
+import { appConfigStore } from "../../stores/appConfigStore";
 
 export class ProtoUtil {
     static async getMethodRpc(serviceName: string, methodName: string): Promise<RpcProtoInfo> {

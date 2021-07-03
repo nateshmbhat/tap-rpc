@@ -16,10 +16,12 @@ export class RpcProtoInfo {
   mockResponseTemplate: MethodPayload;
   client: any;
   serviceName: string;
+  protoFileName: string;
   private serviceDef: Service;
 
-  constructor(service: ProtoService, methodName: string) {
+  constructor( protoFileName : string ,service: ProtoService, methodName: string) {
     this.methodName = methodName;
+    this.protoFileName = protoFileName
     this.mockRequestTemplate = service.requestMocks[this.methodName]()
     this.mockResponseTemplate = service.responseMocks[this.methodName]()
 
