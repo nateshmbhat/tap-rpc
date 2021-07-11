@@ -4,7 +4,8 @@ export enum IpcChannel {
     startServer = 'setProtoFiles',
     setProtoImportPaths = 'setProtoImportPaths',
     onRequest = 'onRequest',
-    willQuitApp = 'will-quit-app'
+    onAppCloseRequest = 'onAppCloseRequest',
+    closeElectronApp = 'closeElectronApp'
 }
 
 export interface IpcRequest {

@@ -66,7 +66,7 @@ export abstract class AppDataDiskStore {
 interface SerializedTabConfigModel {
 	selectedProto: ({
 		protoFileName?: string;
-		serviceName?: string;
+		fullServiceName?: string;
 		methodName?: string;
 	}),
 	id: string;
@@ -96,7 +96,7 @@ abstract class TabModelConverter {
 			tlsCertificate: tabConfigModel.tlsCertificate,
 			selectedProto: {
 				methodName: tabConfigModel.selectedRpc?.methodName,
-				serviceName: tabConfigModel.selectedRpc?.fullServiceName,
+				fullServiceName: tabConfigModel.selectedRpc?.fullServiceName,
 				protoFileName: tabConfigModel.selectedRpc?.protoFileName,
 			},
 			clientRequestEditorState: { ...tabConfigModel.clientRequestEditorState },
@@ -110,7 +110,7 @@ abstract class TabModelConverter {
 		let services = allProtoFiles.find((file) => file.fileName === selectedRpcInfo.protoFileName)?.services
 		let selectedRpc: RpcProtoInfo | undefined
 		if (services !== undefined) {
-			selectedRpc = Object.values(services).find(s => s.serviceName === selectedRpcInfo.serviceName)?.methods[selectedRpcInfo.methodName!]
+			selectedRpc = Object.values(services).find(s => s.fullServiceName === selectedRpcInfo.fullServiceName)?.methods[selectedRpcInfo.methodName!]
 		}
 		const defaultTabConfig = getDefaultTabConfig()
 		return {

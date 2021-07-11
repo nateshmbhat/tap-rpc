@@ -71,7 +71,7 @@ function parseServices(proto: Proto) {
     const serviceDefinition = serviceClientImpl.service
 
     const serviceObject: ProtoService = {
-      serviceName: serviceName,
+      fullServiceName: serviceName,
       proto,
       serviceDefinition: serviceDefinition,
       requestMocks: requestMocks,

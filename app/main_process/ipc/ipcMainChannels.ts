@@ -4,6 +4,7 @@ import { IpcChannel, IpcMainChannelInterface, IpcRequest } from "../../commons/i
 import { protoFilesStore, protoImportPathsStore } from "../../stores";
 import { startProxyGrpcServer } from "../grpcServer";
 import { get } from "svelte/store";
+const { app } = require('electron');
 
 export class StartServerChannel implements IpcMainChannelInterface {
     getName(): string {
@@ -37,5 +38,19 @@ export class SetProtoImportPathsChannel implements IpcMainChannelInterface {
         const { folderPaths } = request.params
         protoImportPathsStore.setProtoImportPaths(folderPaths)
         event.sender.send(request.responseChannel, {});
+    }
+}
+
+
+export class CloseElectronAppChannel implements IpcMainChannelInterface {
+    getName(): string {
+        return IpcChannel.closeElectronApp
+    }
+    async handle(event: IpcMainEvent, request: IpcRequest): Promise<void> {
+        if (!request.responseChannel) {
+            request.responseChannel = `${this.getName()}_response`;
+        }
+        event.sender.send(request.responseChannel, {});
+        app.quit()
     }
 }

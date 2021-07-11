@@ -17,4 +17,8 @@ export class MainProcessInterface {
             }
         })
     }
+
+    static closeElectronApp<T>(): Promise<T> {
+        return IpcMainService.send<T>(IpcChannel.closeElectronApp, {})
+    }
 }

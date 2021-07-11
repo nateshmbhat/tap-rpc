@@ -10,6 +10,7 @@ import { get } from "svelte/store";
 import { IncomingRequest, MonitorConnectionStatus, RpcOperationMode } from "../components/types/types";
 import { appConfigStore } from "../../stores/appConfigStore";
 import { AppDataDiskStore } from "../../disk_storage/appDataDiskStorage";
+import { MainProcessInterface } from "./ipcMainProcessInterface";
 
 export class RequestHandlerChannel implements IpcRendererChannelInterface {
     getName(): string {
@@ -115,11 +116,14 @@ export class RequestHandlerChannel implements IpcRendererChannelInterface {
     }
 }
 
+
 export class AppQuitHandlerChannel implements IpcRendererChannelInterface {
     getName(): string {
-        return IpcChannel.willQuitApp
+        return IpcChannel.onAppCloseRequest
     }
+
     handle(event: Electron.IpcRendererEvent, request: IpcRequest): void {
         AppDataDiskStore.storeAppData(get(appConfigStore))
+        MainProcessInterface.closeElectronApp()
     }
 }

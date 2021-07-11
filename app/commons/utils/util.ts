@@ -13,7 +13,7 @@ export class ProtoUtil {
     static async getMethodRpc(serviceName: string, methodName: string): Promise<RpcProtoInfo> {
         const services = await servicesStore.getValue()
         return new Promise<RpcProtoInfo>((res, rej) => {
-            const filteredServices = services.filter((service, index) => service.serviceName === serviceName)
+            const filteredServices = services.filter((service, index) => service.fullServiceName === serviceName)
             if (filteredServices.length == 0) {
                 rej('could not find the service ' + serviceName)
                 return

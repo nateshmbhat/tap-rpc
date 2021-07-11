@@ -34,9 +34,9 @@ export class RpcProtoInfo {
     this.mockResponsePayload = { message: new Message(responsePayload), plain: responsePayload }
     this.mockResponsePayloadString = ProtoUtil.stringify(this.mockResponsePayload.plain)
 
-    this.client = lodashGet(service.proto.ast, service.serviceName);
-    this.serviceDef = service.proto.root.lookupService(service.serviceName);
-    this.fullServiceName = service.serviceName
+    this.client = lodashGet(service.proto.ast, service.fullServiceName);
+    this.serviceDef = service.proto.root.lookupService(service.fullServiceName);
+    this.fullServiceName = service.fullServiceName
     this.shortServiceName = this.serviceDef.name
   }
 

@@ -1,8 +1,6 @@
 import * as grpc from '@grpc/grpc-js'
-import { MainProcessAppConfigModel, mainProcessAppConfigStore } from '../stores';
-import type { ProtoService, ResponseError } from '../renderer/behaviour';
-import { responseInterceptor } from '../renderer/behaviour';
-import { ipcRenderer } from 'electron';
+import { mainProcessAppConfigStore } from '../stores';
+import type { ProtoService } from '../renderer/behaviour';
 import { RendererProcessInterface } from './ipc/ipcRendererProcessInterface';
 import { get } from 'svelte/store';
 
@@ -17,7 +15,7 @@ function addGrpcServices(server: grpc.Server | null, serviceProtos: ProtoService
     Object.entries(serviceProto.methods).forEach(([methodName, methodRpcInfo]) => {
       serviceImplementation[methodName] = (clientCall: any, callback: grpc.sendUnaryData<any>) => {
         RendererProcessInterface.onRequest(clientCall.request, clientCall.metadata,
-          serviceProto.serviceName, methodRpcInfo.methodName).then((response) => {
+          serviceProto.fullServiceName, methodRpcInfo.methodName).then((response) => {
             console.log('reponse from renderer process : ')
             console.dir(response, { depth: null })
             if (response.error === undefined) {
