@@ -8,7 +8,8 @@ import { activeTabConfigStore } from "../../stores";
 import { GrpcClientManager } from "../behaviour/grpcClientManager";
 import { get } from "svelte/store";
 import { IncomingRequest, MonitorConnectionStatus, RpcOperationMode } from "../components/types/types";
-import { appConfigStore } from "../../stores/tabStore";
+import { appConfigStore } from "../../stores/appConfigStore";
+import { AppDataDiskStore } from "../../disk_storage/appDataDiskStorage";
 
 export class RequestHandlerChannel implements IpcRendererChannelInterface {
     getName(): string {
@@ -114,3 +115,11 @@ export class RequestHandlerChannel implements IpcRendererChannelInterface {
     }
 }
 
+export class AppQuitHandlerChannel implements IpcRendererChannelInterface {
+    getName(): string {
+        return IpcChannel.willQuitApp
+    }
+    handle(event: Electron.IpcRendererEvent, request: IpcRequest): void {
+        AppDataDiskStore.storeAppData(get(appConfigStore))
+    }
+}

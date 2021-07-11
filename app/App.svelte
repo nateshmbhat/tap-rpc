@@ -1,20 +1,22 @@
 <script lang="ts">
   import TapRpc from "./renderer/components/TapRpc.svelte";
   import { MaterialApp } from "svelte-materialify";
-  import { onMount } from "svelte";
+  import { onDestroy, onMount } from "svelte";
   import { ProtoFilesDiskStore } from "./disk_storage/protos";
   import { ProtoUtil } from "./commons/utils";
   import { protoImportPathsStore } from "./stores";
   import AppSnackBar from "./renderer/components/microComponents/AppSnackBar.svelte";
+  import { AppDataDiskStore } from "./disk_storage/appDataDiskStorage";
+  import { appConfigStore } from "./stores/appConfigStore";
 
   onMount(async () => {
     const protoFilePaths = ProtoFilesDiskStore.fetchProtoFiles();
-    ProtoUtil.loadProtoFilesAndStartServer(
+    await ProtoUtil.loadProtoFilesAndStartServer(
       protoFilePaths,
       $protoImportPathsStore
     );
+    appConfigStore.setValue(AppDataDiskStore.fetchAppData());
   });
-
 </script>
 
 <MaterialApp>
@@ -60,5 +62,4 @@
   .flex-expand {
     flex: 1 1 auto;
   }
-
 </style>

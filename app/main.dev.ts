@@ -1,5 +1,5 @@
 import { BrowserWindow } from "electron";
-import type { IpcMainChannelInterface } from "./commons/ipc/ipcChannelInterface";
+import { IpcChannel, IpcMainChannelInterface } from "./commons/ipc/ipcChannelInterface";
 import { NetworkUtil } from "./commons/utils";
 import { StartServerChannel, SetProtoImportPathsChannel } from "./main_process/ipc/ipcMainChannels";
 
@@ -17,11 +17,23 @@ const {
   ipcMain,
 } = require('electron');
 
+const gotSingleInstanceLock = app.requestSingleInstanceLock()
+if (!gotSingleInstanceLock) {
+  app.quit()
+}
+
 class Main {
   private mainWindow: BrowserWindow | null = null;
 
   public getMainWindow(): BrowserWindow {
     return this.mainWindow!
+  }
+
+  private performCleanUp(event: Electron.Event, shouldPreventClosing: boolean = true) {
+    if (shouldPreventClosing) {
+      event.preventDefault()
+    }
+    this.mainWindow?.webContents.send(IpcChannel.willQuitApp)
   }
 
   public init(ipcChannels: IpcMainChannelInterface[]) {
@@ -43,6 +55,14 @@ class Main {
 
     app.on('window-all-closed', this.onWindowAllClosed);
     app.on('ready', this.createWindow);
+    app.on('before-quit', event => this.performCleanUp(event))
+    app.on('second-instance', (event, commandLine, workingDirectory) => {
+      // Someone tried to run a second instance, we should focus our window.
+      if (this.mainWindow) {
+        if (this.mainWindow.isMinimized()) this.mainWindow.restore()
+        this.mainWindow.focus()
+      }
+    })
     this.registerIpcChannels(ipcChannels)
   }
 
@@ -65,6 +85,7 @@ class Main {
       app.quit();
     }
   }
+
 
   private async createWindow() {
     this.mainWindow = new BrowserWindow({
@@ -94,6 +115,10 @@ class Main {
       }, 150);
     });
 
+    this.mainWindow.on('close', (event) => {
+      event.preventDefault()
+      this.mainWindow?.webContents.send(IpcChannel.willQuitApp)
+    })
     this.mainWindow.on('closed', () => {
       this.mainWindow = null;
     });

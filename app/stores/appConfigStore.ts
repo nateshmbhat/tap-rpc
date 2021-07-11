@@ -1,41 +1,16 @@
 import { derived, writable } from "svelte/store";
 import type { Certificate, RpcProtoInfo } from "../renderer/behaviour";
-import { EditorEventEmitter } from "../renderer/behaviour/responseStateController";
-import { ClientEditorModel, EditorDataFlowMode, MonitorConnectionStatus, MonitorRequestEditorModel, MonitorResponseEditorModel, RpcOperationMode, TabConfigModel, AppConfigModel, MockRpcEditorModel, } from "../renderer/components/types/types";
 import immer from "immer";
+import { AppDataDiskStore, getDefaultTabConfig } from "../disk_storage/appDataDiskStorage";
+import type { AppConfigModel, TabConfigModel, RpcOperationMode, MonitorRequestEditorModel, MonitorResponseEditorModel, ClientEditorModel, MockRpcEditorModel } from "../renderer/components/types/types";
 
-
-function getDefaultTabConfig(): TabConfigModel {
-    return ({
-        id: '0',
-        selectedRpc: undefined,
-        targetGrpcServerUrl: 'localhost:9090',
-        rpcOperationMode: RpcOperationMode.monitor,
-        monitorRequestEditorState: {
-            connectionStatus: MonitorConnectionStatus.waiting,
-            eventEmitter: new EditorEventEmitter(), dataFlowMode: EditorDataFlowMode.passThrough
-        },
-        clientRequestEditorState: { text: '{}', metadata: '' },
-        monitorResponseEditorState: {
-            connectionStatus: MonitorConnectionStatus.waiting,
-            eventEmitter: new EditorEventEmitter(), dataFlowMode: EditorDataFlowMode.passThrough
-        },
-        clientResponseEditorState: { text: '', metadata: '' },
-        mockRpcEditorState: { responseText: '{}' }
-    });
-}
 
 function createAppConfigStore() {
-    const defaultTabConfig = getDefaultTabConfig();
-    const { set, subscribe, update } = writable<AppConfigModel>({
-        activeTabIndex: 0,
-        tabs: [defaultTabConfig],
-        defaultTargetServerUrl: defaultTabConfig.targetGrpcServerUrl,
-    });
+    const { set, subscribe, update } = writable<AppConfigModel>(AppDataDiskStore.fetchAppData());
     return {
         subscribe,
         setActiveTab: (index: number) => update((store) => ({ ...store, activeTabIndex: index })),
-        setValue: async (tabConfigListModel: AppConfigModel) => set(tabConfigListModel),
+        setValue: async (appConfigModel: AppConfigModel) => set(appConfigModel),
         setDefaultTargetServerUrl: (targetServer: string) => update(store => {
             const tabs = store.tabs
             if (tabs.length == 1) {

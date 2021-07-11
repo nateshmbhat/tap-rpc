@@ -50,8 +50,10 @@
     return results
   }
 
-  const onRpcClick = (protoInfo: RpcProtoInfo) => {
-    activeTabConfigStore.setSelectedRpc(protoInfo)
+  const onRpcClick = (selectedRpc: RpcSelectorFileType) => {
+    if(selectedRpc.protoInfo!==undefined){
+      activeTabConfigStore.setSelectedRpc(selectedRpc.protoInfo)
+    }
   }
 </script>
 

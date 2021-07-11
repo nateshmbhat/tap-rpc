@@ -1,6 +1,5 @@
 <script lang="ts">
   export let name: string;
-  $: fileExtension = name.slice(name.lastIndexOf(".") + 1);
 </script>
 
 <span

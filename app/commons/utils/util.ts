@@ -61,7 +61,7 @@ export class TabUtil {
         const appConfig = get(appConfigStore)
         return appConfig.tabs.find((tabModel, index, allTabs) => {
             const rpc = tabModel.selectedRpc
-            return rpc?.serviceName == rpcProtoInfo.serviceName && rpc.methodName == rpcProtoInfo.methodName
+            return rpc?.fullServiceName == rpcProtoInfo.fullServiceName && rpc.methodName == rpcProtoInfo.methodName
         })
     }
 }

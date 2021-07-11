@@ -1,11 +1,7 @@
 <script lang="ts">
-  import {
-    Container,
-    Divider,
-    TextField,
-    Tooltip
-  } from "svelte-materialify/src";
-  import { appConfigStore } from "../../../../stores/tabStore";
+  import { Container, Divider, TextField } from "svelte-materialify/src";
+  import { AppDataDiskStore } from "../../../../disk_storage/appDataDiskStorage";
+  import { appConfigStore } from "../../../../stores/appConfigStore";
   import ProtoImporter from "../../../components/protoImporter/ProtoImporter.svelte";
   import ProtoPathImporter from "../../../components/protoPathImporter/ProtoPathImporter.svelte";
   import RpcSelector from "../../../components/rpcSelector/RpcSelector.svelte";
@@ -13,10 +9,10 @@
   function onTargetServerChanged(inputElement: any) {
     appConfigStore.setDefaultTargetServerUrl(inputElement.value);
   }
-
 </script>
 
 <Container>
+  <button on:click={e => AppDataDiskStore.clear()}> CLEAR APP DATA </button>
   <TextField
     value={$appConfigStore.defaultTargetServerUrl}
     on:input={e => onTargetServerChanged(e.target)}
