@@ -9,11 +9,16 @@
 [![](https://img.shields.io/github/languages/code-size/nateshmbhat/tap-rpc)](https://github.com/nateshmbhat/tap-rpc)
 [![](https://img.shields.io/badge/platform-mac,linux,windows-darkgreen)](https://github.com/nateshmbhat/tap-rpc)
 [![](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Fgithub.com%2Fnateshmbhat%2Ftap-rpc)](https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Fnateshmbhat%2Ftap-rpc)<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
-  
 
-**Tap Rpc** is a tool that aids in proto based dynamic generation of **mock server**, real time **request/response editor** and provides **client** to significantly speed up work for all of frontend, backend and testers.
+**Tap Rpc** is a tool that aids in proto based dynamic generation of : 
+- A **mock server** that sends realistic auto generated mock responses (which can be customized).
+- **Realtime modification of request and responses**. Modify requests from client before it reaches server and modify response from server before it reaches client.
+- Provides grpc **client** to send auto generated mock requests to your services.
+
+Tap-Rpc aims to significantly ease the development and testing efforts for all of frontend, backend devs and also testers.
+
+## 🔖📑 [Read the Medium Article on TAP-RPC here](https://medium.com/geekculture/complete-your-grpc-development-and-testing-workflow-with-tap-rpc-bc185a1adce5) ✨
 
 ## Installation and Usage :
 
