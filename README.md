@@ -9,11 +9,27 @@
 [![](https://img.shields.io/github/languages/code-size/nateshmbhat/tap-rpc)](https://github.com/nateshmbhat/tap-rpc)
 [![](https://img.shields.io/badge/platform-mac,linux,windows-darkgreen)](https://github.com/nateshmbhat/tap-rpc)
 [![](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Fgithub.com%2Fnateshmbhat%2Ftap-rpc)](https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Fnateshmbhat%2Ftap-rpc)<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
-  
 
-**Tap Rpc** is a tool that lets developers easily create **mock server** that sends realistic mock responses automatically for all rpcs across multiple grpc services by just loading the proto files, allows you to monitor and modify requests and responses exchanged between client and server in real time and provides **grpc client** to significantly speed up work for all of frontend, backend and testers.
+**Tap Rpc** is a tool that aids in proto based dynamic generation of : 
+- A **mock server** that sends realistic auto generated mock responses (which can be customized).
+- **Realtime modification of request and responses**. Modify requests from client before it reaches server and modify response from server before it reaches client.
+- Provides grpc **client** to send auto generated mock requests to your services.
+
+Tap-Rpc aims to significantly ease the development and testing efforts for all of frontend, backend devs and also testers.
+
+## 🔖📑 [Read the Medium Article on TAP-RPC here](https://medium.com/geekculture/complete-your-grpc-development-and-testing-workflow-with-tap-rpc-bc185a1adce5) ✨
+
+## Installation and Usage :
+
+- Download the latest release from here : https://github.com/nateshmbhat/tap-rpc/releases
+
+- In your client app, set the host and port for the grpc service to point to the Tap-Rpc’s ip address and port shown at the middle of the Tap-Rpc window title.
+- Set the default target server URL, which is needed for the monitor and client modes.
+- User selects the proto files containing the services. Once you select proto files, all the services and Rpcs in those services appear in a tree structure and you can select a particular rpc.
+- At this point any requests coming from the client will be forwarded to the default target server in the background.
+- Now your client app is ready to access all the features of Tap-Rpc.
+
 
 ## Features
 
