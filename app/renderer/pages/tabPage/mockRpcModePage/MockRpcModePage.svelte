@@ -1,12 +1,9 @@
 <script lang="ts">
-  import { onMount } from "svelte";
   import { Switch } from "svelte-materialify/src";
-  import { activeTabConfigStore } from "../../../../stores";
   import MockRpcErrorEditor from "./components/MockRpcErrorEditor.svelte";
 
   let sendErrorResponse = false;
   import MockRpcResponseEditor from "./components/MockRpcResponseEditor.svelte";
-
 </script>
 
 <div class="page">
@@ -27,5 +24,4 @@
     display: flex;
     flex-flow: column;
   }
-
 </style>

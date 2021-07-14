@@ -12,10 +12,6 @@ function createAppConfigStore() {
         setActiveTab: (index: number) => update((store) => ({ ...store, activeTabIndex: index })),
         setValue: async (appConfigModel: AppConfigModel) => set(appConfigModel),
         setDefaultTargetServerUrl: (targetServer: string) => update(store => {
-            const tabs = store.tabs
-            if (tabs.length == 1) {
-                tabs[0].targetGrpcServerUrl = targetServer
-            }
             return ({ ...store, defaultTargetServerUrl: targetServer });
         }),
         setTabValue: (newTabConfig: TabConfigModel, tabId: string) => update((store) => {
@@ -78,7 +74,6 @@ function createAppConfigStore() {
         addNewTab: () => update((config) => {
             const allTabs = Array.from(config.tabs)
             const newTabConfig = getDefaultTabConfig()
-            newTabConfig.targetGrpcServerUrl = config.defaultTargetServerUrl
             if (allTabs.length > 0) {
                 newTabConfig.clientRequestEditorState.metadata = allTabs[0].clientRequestEditorState.metadata
             }

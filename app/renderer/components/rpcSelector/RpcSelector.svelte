@@ -26,7 +26,7 @@
     let results: RpcSelectorFileType[] = []
     services.forEach((service) => {
       results.push({
-        name: service.serviceName,
+        name: service.fullServiceName,
         type: 'folder',
         files: getServiceMethods(service),
       })

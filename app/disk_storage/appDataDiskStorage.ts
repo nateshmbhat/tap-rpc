@@ -1,7 +1,6 @@
 // @ts-ignore
 import * as Store from "electron-store";
 import { get } from "svelte/store";
-import { ProtoUtil } from "../commons/utils";
 import type { Certificate, RpcProtoInfo } from "../renderer/behaviour";
 import { EditorEventEmitter } from "../renderer/behaviour/responseStateController";
 import { AppConfigModel, EditorDataFlowMode, MockRpcEditorModel, MonitorConnectionStatus, RpcOperationMode, TabConfigModel } from "../renderer/components/types/types";
@@ -12,7 +11,7 @@ export function getDefaultTabConfig(): TabConfigModel {
 	return ({
 		id: '0',
 		selectedRpc: undefined,
-		targetGrpcServerUrl: 'localhost:9090',
+		targetGrpcServerUrl: '',
 		rpcOperationMode: RpcOperationMode.monitor,
 		monitorRequestEditorState: {
 			connectionStatus: MonitorConnectionStatus.waiting,
