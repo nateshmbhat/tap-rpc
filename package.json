@@ -1,6 +1,6 @@
 {
   "name": "tap-rpc",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Tap Rpc is a tool that aids in proto based dynamic generation of mock server, real time request/response editor and provides client to significantly speed up work for all of frontend, backend devs and testers.",
   "displayName": "Tap Rpc",
   "main": "app/main.prod.js",
