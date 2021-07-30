@@ -26,7 +26,7 @@
     let results: RpcSelectorFileType[] = []
     services.forEach((service) => {
       results.push({
-        name: service.serviceName,
+        name: service.fullServiceName,
         type: 'folder',
         files: getServiceMethods(service),
       })
@@ -50,8 +50,10 @@
     return results
   }
 
-  const onRpcClick = (protoInfo: RpcProtoInfo) => {
-    activeTabConfigStore.setSelectedRpc(protoInfo)
+  const onRpcClick = (selectedRpc: RpcSelectorFileType) => {
+    if(selectedRpc.protoInfo!==undefined){
+      activeTabConfigStore.setSelectedRpc(selectedRpc.protoInfo)
+    }
   }
 </script>
 

@@ -1,9 +1,11 @@
-import type { IpcMainEvent , IpcRendererEvent } from "electron";
+import type { IpcMainEvent, IpcRendererEvent } from "electron";
 
 export enum IpcChannel {
     startServer = 'setProtoFiles',
     setProtoImportPaths = 'setProtoImportPaths',
-    onRequest= 'onRequest'
+    onRequest = 'onRequest',
+    onAppCloseRequest = 'onAppCloseRequest',
+    closeElectronApp = 'closeElectronApp'
 }
 
 export interface IpcRequest {

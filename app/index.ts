@@ -1,6 +1,6 @@
 import { ipcRenderer } from 'electron';
 import App from './App.svelte';
-import { RequestHandlerChannel } from './renderer/ipc/ipcRendererChannels';
+import { AppQuitHandlerChannel, RequestHandlerChannel } from './renderer/ipc/ipcRendererChannels';
 import type { IpcRendererChannelInterface } from './commons/ipc/ipcChannelInterface';
 
 
@@ -11,6 +11,6 @@ const app = new App({
 function registerIpcChannels(ipcChannels: IpcRendererChannelInterface[]) {
 	ipcChannels.forEach(channel => ipcRenderer.on(channel.getName(), (event, request) => channel.handle(event, request)));
 }
-registerIpcChannels([new RequestHandlerChannel()])
+registerIpcChannels([new RequestHandlerChannel(), new AppQuitHandlerChannel()])
 
 export default app;

@@ -15,11 +15,14 @@ export class RpcProtoInfo {
   mockResponsePayloadString: string;
   mockResponseTemplate: MethodPayload;
   client: any;
-  serviceName: string;
+  fullServiceName: string;
+  shortServiceName: string;
+  protoFileName: string;
   private serviceDef: Service;
 
-  constructor(service: ProtoService, methodName: string) {
+  constructor(protoFileName: string, service: ProtoService, methodName: string) {
     this.methodName = methodName;
+    this.protoFileName = protoFileName
     this.mockRequestTemplate = service.requestMocks[this.methodName]()
     this.mockResponseTemplate = service.responseMocks[this.methodName]()
 
@@ -31,9 +34,10 @@ export class RpcProtoInfo {
     this.mockResponsePayload = { message: new Message(responsePayload), plain: responsePayload }
     this.mockResponsePayloadString = ProtoUtil.stringify(this.mockResponsePayload.plain)
 
-    this.client = lodashGet(service.proto.ast, service.serviceName);
-    this.serviceDef = service.proto.root.lookupService(service.serviceName);
-    this.serviceName = this.serviceDef.name
+    this.client = lodashGet(service.proto.ast, service.fullServiceName);
+    this.serviceDef = service.proto.root.lookupService(service.fullServiceName);
+    this.fullServiceName = service.fullServiceName
+    this.shortServiceName = this.serviceDef.name
   }
 
   methodDef() {

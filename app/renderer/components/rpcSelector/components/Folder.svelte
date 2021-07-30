@@ -12,7 +12,7 @@
     expanded = !expanded
   }
 
-  const dispatch = createEventDispatcher<{ fileClick: RpcProtoInfo }>()
+  const dispatch = createEventDispatcher<{ fileClick: RpcSelectorFileType}>()
 </script>
 
 <span class:expanded on:click={toggle}>{name}</span>
@@ -26,7 +26,7 @@
         {:else}
           <File
             {...file}
-            on:click={e => dispatch("fileClick", file.protoInfo)}
+            on:click={e => dispatch("fileClick", file)}
           />
         {/if}
       </li>

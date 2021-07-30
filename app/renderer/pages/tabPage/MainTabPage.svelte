@@ -8,6 +8,9 @@
   import MockRpcModePage from './mockRpcModePage/MockRpcModePage.svelte'
   import { Tabs, TabContent, Tab } from 'svelte-materialify/src'
   import { RpcOperationMode } from '../../components/types/types';
+  import { onMount } from 'svelte';
+  import { appConfigStore } from '../../../stores/appConfigStore';
+import MainTabContent from './MainTabContent.svelte'
 
   const allModes = Object.values(RpcOperationMode)
   console.log(
@@ -19,6 +22,7 @@
     console.log('new mode = ', newMode)
     activeTabConfigStore.setRpcOperationMode(newMode)
   }
+
 </script>
 
 {#if $activeTabConfigStore.selectedRpc}
@@ -37,15 +41,7 @@
         {/each}
       </div>
       <div class="ma-1">
-        <TabContent>
-          <MockRpcModePage />
-        </TabContent>
-        <TabContent>
-          <MonitorModePage />
-        </TabContent>
-        <TabContent>
-          <ClientModePage />
-        </TabContent>
+        <MainTabContent />
       </div>
     </Tabs>
   </div>

@@ -11,13 +11,10 @@
     Button,
     Icon,
   } from 'svelte-materialify/src'
-  import {
-    activeTabConfigStore,
-    appConfigStore,
-  } from '../../stores/tabStore'
-  import { onMount, tick } from 'svelte'
+  import { onMount} from 'svelte'
   import TabCloseButton from '../pages/tabPage/components/TabCloseButton.svelte'
   import type { TabConfigModel } from './types/types';
+  import { appConfigStore } from '../../stores/appConfigStore';
 
   $: tabs = $appConfigStore.tabs
 
@@ -80,5 +77,4 @@
   .new-tab-button {
     transform: translate(10px, 10px);
   }
-
 </style>

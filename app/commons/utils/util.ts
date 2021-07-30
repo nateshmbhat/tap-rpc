@@ -3,18 +3,17 @@ import type { OpenDialogReturnValue } from "electron/main";
 import { loadProtos, RpcProtoInfo } from "../../renderer/behaviour";
 import { protoFilesStore, servicesStore } from "../../stores";
 import faker, { random } from 'faker';
-import { appConfigStore } from "../../stores/tabStore";
 import { get } from "svelte/store";
 import type { IncomingRequest, TabConfigModel } from "../../renderer/components/types/types";
 import { Metadata } from "@grpc/grpc-js";
 import type { MethodPayload } from "bloomrpc-mock-js";
-import { randomInt } from "crypto";
+import { appConfigStore } from "../../stores/appConfigStore";
 
 export class ProtoUtil {
     static async getMethodRpc(serviceName: string, methodName: string): Promise<RpcProtoInfo> {
         const services = await servicesStore.getValue()
         return new Promise<RpcProtoInfo>((res, rej) => {
-            const filteredServices = services.filter((service, index) => service.serviceName === serviceName)
+            const filteredServices = services.filter((service, index) => service.fullServiceName === serviceName)
             if (filteredServices.length == 0) {
                 rej('could not find the service ' + serviceName)
                 return
@@ -62,7 +61,7 @@ export class TabUtil {
         const appConfig = get(appConfigStore)
         return appConfig.tabs.find((tabModel, index, allTabs) => {
             const rpc = tabModel.selectedRpc
-            return rpc?.serviceName == rpcProtoInfo.serviceName && rpc.methodName == rpcProtoInfo.methodName
+            return rpc?.fullServiceName == rpcProtoInfo.fullServiceName && rpc.methodName == rpcProtoInfo.methodName
         })
     }
 }

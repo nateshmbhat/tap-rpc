@@ -15,7 +15,7 @@ export interface ProtoServiceList {
 
 export interface ProtoService {
   proto: Proto,
-  serviceName: string,
+  fullServiceName: string,
   serviceDefinition: ServiceDefinition,
   requestMocks: ServiceMethodsPayload,
   responseMocks: ServiceMethodsPayload,
